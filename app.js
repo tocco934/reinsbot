@@ -36,7 +36,7 @@ const checkMessage = (message) => {
       !addreins <troopCount> <seatOfPower>
       !getreins [<seatOfPower>]
 
-    For any bug reports or help ask <username var> or email <support email>
+    For any bug reports or help ask ${process.env.username} or email ${process.env.supportEmail}
     `);
   }
 
