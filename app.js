@@ -29,13 +29,14 @@ const checkMessage = (message) => {
     message.reply('HELLO BOOM FACE');
   }
 
+  // TODO: make the vars below into environment variables
   if (_.toLower(message.content).substring(0, 9) === '!help') {
     message.reply(`
     Commands:
       !addreins <troopCount> <seatOfPower>
       !getreins [<seatOfPower>]
 
-    For any bug reports or help ask GeneralNonsense9 or email generalnonsense9@gmail.com
+    For any bug reports or help ask <username var> or email <support email>
     `);
   }
 
