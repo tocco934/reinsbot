@@ -1,0 +1,8 @@
+extends: airbnb-base
+env: 
+  jest: true
+plugins:
+  - import
+rules:
+  no-console: off
+  no-return-assign: [2, except-parens]
