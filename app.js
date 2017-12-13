@@ -51,7 +51,7 @@ const checkMessage = (message) => {
 
 client.on('message', message => checkMessage(message));
 
-client.login('');
+client.login(process.env.discordToken);
 
 module.exports = {
   checkMessage,
