@@ -19,6 +19,7 @@
     "jest": "^21.2.1"
   },
   "scripts": {
+    "start": "node app.js",
     "jest": "jest",
     "test": "jest test.js"
   },
