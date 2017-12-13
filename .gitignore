@@ -1,0 +1,5 @@
+# package directories
+.vscode
+node_modules
+
+npm-debug.log
