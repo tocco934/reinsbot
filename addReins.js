@@ -1,10 +1,11 @@
 const _ = require('lodash');
-const cache = require('memory-cache');
-const cacheKeyGenerator = require('./generateCacheKey').generateKey;
+const dataStore = require('./dataStore');
+// const cache = require('memory-cache');
+// const cacheKeyGenerator = require('./generateCacheKey').generateKey;
 
 const validateCommand = (splitMessage) => {
   if (splitMessage.length < 2
-    || !(_.parseInt(splitMessage[0]) && _.parseInt(splitMessage[0]) !== 0)) {
+    || (!_.parseInt(splitMessage[0]) && _.parseInt(splitMessage[0]) !== 0)) {
     throw new Error('Missing addreins params');
   }
 };
@@ -22,10 +23,11 @@ const parseMessage = (message) => {
   };
 };
 
-const addReins = (message) => {
+const addReins = async (message) => {
   try {
     const parsedMessage = parseMessage(message);
-    cache.put(cacheKeyGenerator(parsedMessage), JSON.stringify(parsedMessage), 3600000);
+    await dataStore.addReins(parsedMessage);
+    // cache.put(cacheKeyGenerator(parsedMessage), JSON.stringify(parsedMessage), 3600000);
     message.reply('Reins Added');
   } catch (e) {
     // console.log(e);

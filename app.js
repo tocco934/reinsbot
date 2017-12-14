@@ -1,10 +1,11 @@
 const _ = require('lodash');
 const Discord = require('discord.js');
+const settings = require('./settings');
 const addReins = require('./addReins').addReins;
 const getReins = require('./getReins').getReins;
+const dataStore = require('./dataStore');
 
 const client = new Discord.Client();
-// const settings = require('./settings.json');
 
 client.on('ready', () => {
   console.log('Lets fuck shit up!');
@@ -51,7 +52,9 @@ const checkMessage = (message) => {
 
 client.on('message', message => checkMessage(message));
 
-client.login(process.env.discordToken);
+dataStore.createReinsTable();
+
+client.login(process.env.discordToken || settings.discordToken);
 
 module.exports = {
   checkMessage,
