@@ -42,8 +42,6 @@ const getAllReins = async () => {
   const res = await client.query('SELECT * FROM reinsv1');
   await client.end();
 
-  console.log('rows', res.rows);
-
   return res.rows;
 };
 
