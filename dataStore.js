@@ -1,6 +1,7 @@
-const _ = require('lodash');
 const { Client } = require('pg');
-const settings = require('./settings');
+const optional = require('optional');
+
+const settings = optional('./settings');
 
 const setupClient = async () => {
   const client = new Client({
