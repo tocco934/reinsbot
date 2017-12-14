@@ -5,9 +5,29 @@ afterEach(() => {
 });
 
 describe('validateCommand', () => {
-  // test('Handles when a troop value of 0 is given', () => {
+  test('Handles when a troop value of 0 is given', () => {
+    addReins.validateCommand(['0', 'blahhh']);
+  });
 
-  // });
+  test('Handles when only count was given', () => {
+    let errorThrown;
+    try {
+      addReins.validateCommand(['0']);
+    } catch (err) {
+      errorThrown = true;
+    }
+    expect(errorThrown).toBeTruthy();
+  });
+
+  test('Handles when only count was given', () => {
+    let errorThrown;
+    try {
+      addReins.validateCommand(['0']);
+    } catch (err) {
+      errorThrown = true;
+    }
+    expect(errorThrown).toBeTruthy();
+  });
 });
 
 describe('parseMessage', () => {

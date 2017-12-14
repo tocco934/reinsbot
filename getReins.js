@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const dataStore = require('./dataStore');
 const cache = require('memory-cache');
 
 const parseLocation = (contents) => {
@@ -26,20 +27,46 @@ const getReinsForLocation = (location) => {
   --${_.join(formattedReinforcers, '\n  --')}`;
 };
 
-const getReinsForAll = () => {
-  const cacheKeys = cache.keys();
-  const allLocations = _.map(cacheKeys, key => _.split(key, '-')[0]);
-  const locations = _.sortBy(_.uniq(allLocations));
+// const getReinsForAll = () => {
+//   const cacheKeys = cache.keys();
+//   const allLocations = _.map(cacheKeys, key => _.split(key, '-')[0]);
+//   const locations = _.sortBy(_.uniq(allLocations));
 
-  return _.join(_.map(locations, getReinsForLocation), '\n\n =========');
+//   if (_.isEmpty(locations)) {
+//     return 'No reins found.';
+//   }
+//   return _.join(_.map(locations, getReinsForLocation), '\n\n =========');
+// };
+
+const getReinsForAll = async () => {
+  const reins = await dataStore.getAllReins();
+
+  if (_.isEmpty(reins)) {
+    return 'No reins found.';
+  }
+
+  const reinsGroupedByLocation = _.groupBy(reins, rein => _.toLower(rein.location));
+
+  // TODO: format location to capitalize. Have to do it individually for each part
+  // TODO: chain this and pull formatting into different function
+  return _.join(_.map(reinsGroupedByLocation, (locationReins) => {
+    const totalReinforcements = _.sumBy(locationReins, rein => rein.count);
+    const formattedReinforcers = _.map(locationReins, entry => `${entry.username} (${entry.nickname}) ${entry.count}`);
+
+    return `\n
+Seat of Power: ${_.capitalize(locationReins[0].location)}
+Total Reinforcements: ${totalReinforcements}
+Reinforcements:
+ --${_.join(formattedReinforcers, '\n --')}`;
+  }), '\n\n =========');
 };
 
-const getReins = (message) => {
+const getReins = async (message) => {
   try {
     let reply;
     const location = parseLocation(message.content);
     if (_.isEmpty(location)) {
-      reply = getReinsForAll();
+      reply = await getReinsForAll();
     } else {
       reply = getReinsForLocation(location);
     }
