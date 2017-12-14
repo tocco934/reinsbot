@@ -1,6 +1,8 @@
 const _ = require('lodash');
 const Discord = require('discord.js');
-const settings = require('./settings');
+const optional = require('optional');
+
+const settings = optional('./settings');
 const addReins = require('./addReins').addReins;
 const getReins = require('./getReins').getReins;
 const dataStore = require('./dataStore');
