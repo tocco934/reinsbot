@@ -19,24 +19,13 @@ const getReinsForLocation = (location) => {
     return `No reins found for ${location}`;
   }
 
-  const formattedReinforcers = _.map(cacheEntriesForLocation, entry => `${entry.username} (${entry.nickname}) ${entry.count}`);
+  const formattedReinforcers = _.map(cacheEntriesForLocation, entry => `${entry.id} ${entry.username} (${entry.nickname}) ${entry.count}`);
   return `\n
   Seat of Power: ${location}
   Total Reinforcements: ${totalReinforcements}\n
   Reinforcements:
   --${_.join(formattedReinforcers, '\n  --')}`;
 };
-
-// const getReinsForAll = () => {
-//   const cacheKeys = cache.keys();
-//   const allLocations = _.map(cacheKeys, key => _.split(key, '-')[0]);
-//   const locations = _.sortBy(_.uniq(allLocations));
-
-//   if (_.isEmpty(locations)) {
-//     return 'No reins found.';
-//   }
-//   return _.join(_.map(locations, getReinsForLocation), '\n\n =========');
-// };
 
 const getReinsForAll = async () => {
   const reins = await dataStore.getAllReins();
@@ -51,7 +40,7 @@ const getReinsForAll = async () => {
   // TODO: chain this and pull formatting into different function
   return _.join(_.map(reinsGroupedByLocation, (locationReins) => {
     const totalReinforcements = _.sumBy(locationReins, rein => rein.count);
-    const formattedReinforcers = _.map(locationReins, entry => `${entry.username} (${entry.nickname}) ${entry.count}`);
+    const formattedReinforcers = _.map(locationReins, entry => `${entry.id} ${entry.username} (${entry.nickname}) ${entry.count}`);
 
     return `\n
 Seat of Power: ${_.capitalize(locationReins[0].location)}

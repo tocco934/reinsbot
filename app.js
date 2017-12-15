@@ -5,6 +5,8 @@ const optional = require('optional');
 const settings = optional('./settings');
 const addReins = require('./addReins').addReins;
 const getReins = require('./getReins').getReins;
+const deleteReins = require('./deleteReins').deleteReins;
+const deleteReinsFromLocation = require('./deleteReins').deleteReinsFromLocation;
 const dataStore = require('./dataStore');
 
 const client = new Discord.Client();
@@ -21,23 +23,27 @@ const checkMessage = (message) => {
     addReins(message);
   } else if (_.toLower(message.content).substring(0, 9) === '!getreins') {
     getReins(message);
+  } else if (_.toLower(message.content).substring(0, 12) === '!delreinsall') {
+    deleteReinsFromLocation(message);
   } else if (_.toLower(message.content).substring(0, 9) === '!delreins') {
-    message.reply('Command not set up yet');
+    deleteReins(message);
   }
   // }
 
-  if (_.toLower(message.content).substring(0, 5) === '!test') {
-    message.reply('ahhh \n bbbbb');
-  } else if (_.includes(_.toLower(message.content), '!eric')) {
-    message.reply('HELLO BOOM FACE');
-  }
+  // if (_.toLower(message.content).substring(0, 5) === '!test') {
+  //   message.reply('ahhh \n bbbbb');
+  // } else if (_.includes(_.toLower(message.content), '!eric')) {
+  //   message.reply('HELLO BOOM FACE');
+  // }
 
   // TODO: make the vars below into environment variables
   if (_.toLower(message.content).substring(0, 9) === '!help') {
     message.reply(`
     Commands:
       !addreins <troopCount> <seatOfPower>
-      !getreins [<seatOfPower>]
+      !getreins [<seatOfPower>] (optional)
+      !delreins <id>
+      !delreinsall <location>
 
     For any bug reports or help ask ${process.env.username} or email ${process.env.supportEmail}
     `);
