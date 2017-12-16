@@ -46,12 +46,9 @@ const createReinsTable = async () => {
 };
 
 const removeReins = async (id) => {
-  console.log('id', id);
   let client;
   try {
     client = await setupClient();
-
-    console.log('id', id);
     await client.query('DELETE FROM ONLY reinsv1 WHERE id = $1', [id]);
   } catch (err) {
     console.error('Error deleting reins', err);
@@ -67,7 +64,7 @@ const deleteReinsFromLocation = async (location) => {
   try {
     client = await setupClient();
 
-    await client.query('DELETE FROM ONLY reinsv1 WHERE location = $1', [_.toLower(location)]);
+    await client.query('DELETE FROM ONLY reinsv1 WHERE location = $1', [_.trim(_.toLower(location))]);
   } catch (err) {
     console.error(`Error deleting reins from ${location}`, err);
   } finally {
@@ -83,7 +80,12 @@ const getReinsByLocation = async (location) => {
   try {
     client = await setupClient();
 
-    res = await client.query('SELECT * FROM reinsv1 WHERE location = $1', [_.toLower(location)]);
+    const query = {
+      text: 'SELECT * FROM reinsv1 WHERE location = $1',
+      values: [location],
+    };
+
+    res = await client.query(query);
   } catch (err) {
     console.error(`Error retrieving reins for ${location}`, err);
   } finally {
@@ -119,7 +121,8 @@ const addReins = async (reinInfo) => {
     client = await setupClient();
 
     // TODO: move query to variable
-    const values = [reinInfo.location, reinInfo.username, reinInfo.nickname, reinInfo.count];
+    const values = [_.trim(_.toLower(reinInfo.location)), reinInfo.username,
+      reinInfo.nickname, reinInfo.count];
     await client.query('INSERT INTO reinsv1(location, username, nickname, count, timeAdded) VALUES($1, $2, $3, $4, NOW())', values);
   } catch (err) {
     console.error('Error adding reins', err);
