@@ -1,7 +1,5 @@
 const _ = require('lodash');
 const dataStore = require('./dataStore');
-// const cache = require('memory-cache');
-// const cacheKeyGenerator = require('./generateCacheKey').generateKey;
 
 const validateCommand = (splitMessage) => {
   if (splitMessage.length < 2
@@ -19,20 +17,26 @@ const parseMessage = (message) => {
     username: message.author.username,
     nickname: _.get(message, 'member.nickname', ''),
     count: _.parseInt(splitMessage[0]),
-    location: _.join(_.drop(splitMessage, 1), ' '),
+    location: _.toLower(_.join(_.drop(splitMessage, 1), ' ')),
   };
 };
 
 const addReins = async (message) => {
+  let parsedMessage;
   try {
-    const parsedMessage = parseMessage(message);
-    await dataStore.addReins(parsedMessage);
-    // cache.put(cacheKeyGenerator(parsedMessage), JSON.stringify(parsedMessage), 3600000);
-    message.reply('Reins Added');
+    parsedMessage = parseMessage(message);
   } catch (e) {
-    // console.log(e);
     message.reply('AddReins Usage: !addreins <troopNumber> <seat of power>');
+    return;
   }
+  try {
+    await dataStore.addReins(parsedMessage);
+  } catch (err) {
+    console.error(err);
+    message.reply('Error saving rein data in database');
+    return;
+  }
+  message.reply('Reins Added');
 };
 
 module.exports = {

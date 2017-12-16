@@ -1,42 +1,36 @@
 const _ = require('lodash');
 const dataStore = require('./dataStore');
-const cache = require('memory-cache');
 
 const parseLocation = (contents) => {
   const commandRemoved = _.trim(_.replace(contents, /^!getreins/gi, ''));
   return commandRemoved;
 };
 
-const getReinsForLocation = (location) => {
-  const cacheKeys = cache.keys();
-  const keysFilteredByLocation = _.filter(cacheKeys, key => key.includes(location));
-  const cacheEntriesForLocation = _.map(keysFilteredByLocation, key =>
-    JSON.parse(cache.get(key)));
+const formatReinforcer = reinforcer => `[${reinforcer.id}] ${reinforcer.username} (${reinforcer.nickname}) ${reinforcer.count}`;
 
-  const totalReinforcements = _.sumBy(cacheEntriesForLocation, entry => entry.count) || 0;
+const formatLocationName = (name) => {
+  const splitUpName = _.split(name, ' ');
+  const formattedName = _.map(splitUpName, _.capitalize);
+  return _.join(formattedName, ' ');
+};
+
+const getReinsForLocation = async (location) => {
+  const entriesForLocation = await dataStore.getReinsByLocation(location);
+  const formattedLocation = formatLocationName(location);
+
+  const totalReinforcements = _.sumBy(entriesForLocation, entry => entry.count) || 0;
 
   if (totalReinforcements === 0) {
-    return `No reins found for ${location}`;
+    return `No reins found for ${formattedLocation}`;
   }
 
-  const formattedReinforcers = _.map(cacheEntriesForLocation, entry => `${entry.username} (${entry.nickname}) ${entry.count}`);
+  const formattedReinforcers = _.map(entriesForLocation, formatReinforcer);
   return `\n
-  Seat of Power: ${location}
+  Seat of Power: ${formattedLocation}
   Total Reinforcements: ${totalReinforcements}\n
   Reinforcements:
   --${_.join(formattedReinforcers, '\n  --')}`;
 };
-
-// const getReinsForAll = () => {
-//   const cacheKeys = cache.keys();
-//   const allLocations = _.map(cacheKeys, key => _.split(key, '-')[0]);
-//   const locations = _.sortBy(_.uniq(allLocations));
-
-//   if (_.isEmpty(locations)) {
-//     return 'No reins found.';
-//   }
-//   return _.join(_.map(locations, getReinsForLocation), '\n\n =========');
-// };
 
 const getReinsForAll = async () => {
   const reins = await dataStore.getAllReins();
@@ -47,14 +41,13 @@ const getReinsForAll = async () => {
 
   const reinsGroupedByLocation = _.groupBy(reins, rein => _.toLower(rein.location));
 
-  // TODO: format location to capitalize. Have to do it individually for each part
-  // TODO: chain this and pull formatting into different function
   return _.join(_.map(reinsGroupedByLocation, (locationReins) => {
     const totalReinforcements = _.sumBy(locationReins, rein => rein.count);
-    const formattedReinforcers = _.map(locationReins, entry => `${entry.username} (${entry.nickname}) ${entry.count}`);
+    const formattedReinforcers = _.map(locationReins, formatReinforcer);
+    const formattedLocation = formatLocationName(locationReins[0].location);
 
     return `\n
-Seat of Power: ${_.capitalize(locationReins[0].location)}
+Seat of Power: ${formattedLocation}
 Total Reinforcements: ${totalReinforcements}
 Reinforcements:
  --${_.join(formattedReinforcers, '\n --')}`;
@@ -68,7 +61,7 @@ const getReins = async (message) => {
     if (_.isEmpty(location)) {
       reply = await getReinsForAll();
     } else {
-      reply = getReinsForLocation(location);
+      reply = await getReinsForLocation(location);
     }
 
     message.reply(reply);
