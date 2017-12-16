@@ -49,6 +49,10 @@ const checkMessage = (message) => {
     `);
   }
 
+  if (_.includes(_.toLower(message.content), '!ass2mouth')) {
+    message.reply('You may want to check out: https://www.netflix.com/title/70123094 :)');
+  }
+
   if (_.includes(_.toLower(message.content), '!hello')) {
     message.reply(`Hi <@${message.author.id}>!`);
   }
