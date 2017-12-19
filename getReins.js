@@ -15,7 +15,7 @@ const formatLocationName = (name) => {
 };
 
 const getReinsForLocation = async (location) => {
-  const entriesForLocation = await dataStore.getReinsByLocation(location);
+  const entriesForLocation = await dataStore.getReinsByLocation(_.toLower(location));
   const formattedLocation = formatLocationName(location);
 
   const totalReinforcements = _.sumBy(entriesForLocation, entry => entry.count) || 0;
