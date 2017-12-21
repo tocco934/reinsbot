@@ -65,6 +65,12 @@ describe('parseMessage', () => {
     expect(parsedMessage.count).toBe(count);
   });
 
+  test('Parses counts with commas in them', () => {
+    sampleMessage.content = '!addreins 10,000 bleh';
+    const parsedMessage = addReins.parseMessage(sampleMessage);
+    expect(parsedMessage.count).toBe(10000);
+  });
+
   test('pulls out the seat of power', () => {
     const parsedMessage = addReins.parseMessage(sampleMessage);
     expect(parsedMessage.location).toBe(location);

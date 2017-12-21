@@ -8,6 +8,11 @@ const validateCommand = (splitMessage) => {
   }
 };
 
+const parseInt = (count) => {
+  const countWithoutCommas = _.replace(count, ',', '');
+  return _.parseInt(countWithoutCommas);
+};
+
 const parseMessage = (message) => {
   const messageContents = _.trim(_.replace(message.content, /^!addreins/gi, ''));
   const splitMessage = _.split(messageContents, ' ');
@@ -16,7 +21,7 @@ const parseMessage = (message) => {
   return {
     username: message.author.username,
     nickname: _.get(message, 'member.nickname', ''),
-    count: _.parseInt(splitMessage[0]),
+    count: parseInt(splitMessage[0]),
     location: _.toLower(_.join(_.drop(splitMessage, 1), ' ')),
   };
 };
