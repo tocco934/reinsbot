@@ -4,6 +4,7 @@ const optional = require('optional');
 
 const settings = optional('./settings');
 const addReins = require('./addReins').addReins;
+const addReinsForOther = require('./addReins').addReinsForOther;
 const addSitter = require('./addReins').addSitter;
 const getReins = require('./getReins').getReins;
 const deleteReins = require('./deleteReins').deleteReins;
@@ -22,7 +23,9 @@ const rolesWithPermissions = ['Bottom', 'Top', 'Swinger', 'Admin'];
 const checkMessage = (message) => {
   // console.log('message', message.guild.id);
   // if (_.includes(rolesWithPermissions, message.member.highestRole)) {
-  if (_.toLower(message.content).substring(0, 9) === '!addreins') {
+  if (_.toLower(message.content).substring(0, 10) === '!addreins*') {
+    addReinsForOther(message);
+  } else if (_.toLower(message.content).substring(0, 9) === '!addreins') {
     addReins(message);
   } else if (_.toLower(message.content).substring(0, 10) === '!addsitter') {
     addSitter(message);
@@ -48,6 +51,7 @@ const checkMessage = (message) => {
     message.reply(`
     Commands:
       !addreins <troopCount> <seatOfPower>
+      !addreins* <username>;<troopCount>;<seatOfPower>;
       !addsitter <troopCount> <seatOfPower>
       !getreins [<seatOfPower>] (optional)
       !delreins <id>
