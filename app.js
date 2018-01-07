@@ -4,10 +4,12 @@ const optional = require('optional');
 
 const settings = optional('./settings');
 const addReins = require('./addReins').addReins;
+const addSitter = require('./addReins').addSitter;
 const getReins = require('./getReins').getReins;
 const deleteReins = require('./deleteReins').deleteReins;
+const deleteSitter = require('./deleteReins').deleteSitter;
 const deleteReinsFromLocation = require('./deleteReins').deleteReinsFromLocation;
-const dataStore = require('./dataStore');
+// const dataStore = require('./dataStore');
 
 const client = new Discord.Client();
 
@@ -18,15 +20,20 @@ client.on('ready', () => {
 const rolesWithPermissions = ['Bottom', 'Top', 'Swinger', 'Admin'];
 
 const checkMessage = (message) => {
+  // console.log('message', message.guild.id);
   // if (_.includes(rolesWithPermissions, message.member.highestRole)) {
   if (_.toLower(message.content).substring(0, 9) === '!addreins') {
     addReins(message);
+  } else if (_.toLower(message.content).substring(0, 10) === '!addsitter') {
+    addSitter(message);
   } else if (_.toLower(message.content).substring(0, 9) === '!getreins') {
     getReins(message);
   } else if (_.toLower(message.content).substring(0, 12) === '!delreinsall') {
     deleteReinsFromLocation(message);
   } else if (_.toLower(message.content).substring(0, 9) === '!delreins') {
     deleteReins(message);
+  } else if (_.toLower(message.content).substring(0, 10) === '!delsitter') {
+    deleteSitter(message);
   }
   // }
 
@@ -41,9 +48,11 @@ const checkMessage = (message) => {
     message.reply(`
     Commands:
       !addreins <troopCount> <seatOfPower>
+      !addsitter <troopCount> <seatOfPower>
       !getreins [<seatOfPower>] (optional)
       !delreins <id>
       !delreinsall <location>
+      !delsitter <location>
 
     For any bug reports or help ask ${process.env.username} or email ${process.env.supportEmail}
     `);
@@ -64,7 +73,7 @@ const checkMessage = (message) => {
 
 client.on('message', message => checkMessage(message));
 
-dataStore.createReinsTable();
+// dataStore.createReinsTable();
 
 client.login(process.env.discordToken || settings.discordToken);
 
