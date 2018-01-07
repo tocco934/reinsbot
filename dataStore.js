@@ -84,7 +84,7 @@ const getReinsByLocation = async (location, serverId) => {
     client = await setupClient();
 
     const query = {
-      text: `SELECT * FROM reinsv1_${serverId} WHERE location = $1`,
+      text: `SELECT * FROM reinsv1_${serverId} WHERE location = $1 AND ( issitter = true OR timeAdded > NOW() - INTERVAL '24 hour')`,
       values: [location],
     };
 
@@ -107,7 +107,7 @@ const getAllReins = async (serverId) => {
     await createReinsTable(serverId);
     client = await setupClient();
 
-    res = await client.query(`SELECT * FROM reinsv1_${serverId}`);
+    res = await client.query(`SELECT * FROM reinsv1_${serverId} WHERE issitter = true OR timeAdded > NOW() - INTERVAL '24 hour'`);
   } catch (err) {
     console.error('Error retrieving reins', err);
   } finally {
