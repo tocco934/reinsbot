@@ -83,11 +83,11 @@ const checkMessage = (message) => {
     message.reply('You may want to check out: https://www.netflix.com/title/70123094 :)');
   }
 
-  if (_.includes(_.toLower(message.content), '!contribute')) {
+  if (_.toLower(message.content).substring(0, 11) === '!contribute') {
     message.reply('You can contribute here: https://github.com/tocco934/reinsbot');
   }
 
-  if (_.includes(_.toLower(message.content), '!hello')) {
+  if (_.toLower(message.content).substring(0, 6) === '!hello') {
     message.reply(`Hi <@${message.author.id}>!`);
   }
 
