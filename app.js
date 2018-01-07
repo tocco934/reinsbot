@@ -51,6 +51,7 @@ const checkMessage = (message) => {
     message.reply(`
     Commands:
       !addreins <troopCount> <seatOfPower>
+      !addreins* <username>;<troopCount>;<seatOfPower>;
       !addsitter <troopCount> <seatOfPower>
       !getreins [<seatOfPower>] (optional)
       !delreins <id>
