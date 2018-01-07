@@ -14,7 +14,8 @@ const parseInt = (count) => {
 };
 
 const parseMessage = (message) => {
-  const messageContents = _.trim(_.replace(message.content, /^!addreins/gi, ''));
+  let messageContents = _.trim(_.replace(message.content, /^!addreins/gi, ''));
+  messageContents = _.trim(_.replace(messageContents, /^!addSitter/gi, ''));
   const splitMessage = _.split(messageContents, ' ');
   validateCommand(splitMessage);
 
@@ -35,7 +36,7 @@ const addReins = async (message) => {
     return;
   }
   try {
-    await dataStore.addReins(parsedMessage);
+    await dataStore.addReins(parsedMessage, message.guild.id);
   } catch (err) {
     console.error(err);
     message.reply('Error saving rein data in database');
@@ -44,8 +45,27 @@ const addReins = async (message) => {
   message.reply('Reins Added');
 };
 
+const addSitter = async (message) => {
+  let parsedMessage;
+  try {
+    parsedMessage = parseMessage(message);
+  } catch (e) {
+    message.reply('AddSitter Usage: !addsitter <troopNumber> <seat of power>');
+    return;
+  }
+  try {
+    await dataStore.addSitter(parsedMessage, message.guild.id);
+  } catch (err) {
+    console.error(err);
+    message.reply('Error setting sitter data in database');
+    return;
+  }
+  message.reply('Sitter Added');
+};
+
 module.exports = {
   addReins,
+  addSitter,
   parseMessage,
   validateCommand,
 };

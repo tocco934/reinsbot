@@ -20,18 +20,19 @@ const setupClient = async () => {
   return client;
 };
 
-const createReinsTable = async () => {
+const createReinsTable = async (serverId) => {
   let client;
   try {
     client = await setupClient();
 
     const createSyntax = `
-      CREATE TABLE IF NOT EXISTS reinsv1 (
+      CREATE TABLE IF NOT EXISTS reinsv1_${serverId} (
         id SERIAL PRIMARY KEY,
         location varchar(100) NOT NULL,
         username varchar(100) NOT NULL,
         nickname varchar(100),
         count int NOT NULL,
+        isSitter bool default false NOT NULL,
         timeAdded timestamp NOT NULL
       );`;
 
@@ -45,11 +46,11 @@ const createReinsTable = async () => {
   }
 };
 
-const removeReins = async (id) => {
+const removeReins = async (id, serverId) => {
   let client;
   try {
     client = await setupClient();
-    await client.query('DELETE FROM ONLY reinsv1 WHERE id = $1', [id]);
+    await client.query(`DELETE FROM ONLY reinsv1_${serverId} WHERE id = $1`, [id]);
   } catch (err) {
     console.error('Error deleting reins', err);
   } finally {
@@ -59,12 +60,12 @@ const removeReins = async (id) => {
   }
 };
 
-const deleteReinsFromLocation = async (location) => {
+const deleteReinsFromLocation = async (location, serverId) => {
   let client;
   try {
     client = await setupClient();
 
-    await client.query('DELETE FROM ONLY reinsv1 WHERE location = $1', [_.trim(_.toLower(location))]);
+    await client.query(`DELETE FROM ONLY reinsv1_${serverId} WHERE location = $1`, [_.trim(_.toLower(location))]);
   } catch (err) {
     console.error(`Error deleting reins from ${location}`, err);
   } finally {
@@ -74,14 +75,16 @@ const deleteReinsFromLocation = async (location) => {
   }
 };
 
-const getReinsByLocation = async (location) => {
+const getReinsByLocation = async (location, serverId) => {
   let client;
   let res;
+
   try {
+    await createReinsTable(serverId);
     client = await setupClient();
 
     const query = {
-      text: 'SELECT * FROM reinsv1 WHERE location = $1',
+      text: `SELECT * FROM reinsv1_${serverId} WHERE location = $1`,
       values: [location],
     };
 
@@ -97,13 +100,14 @@ const getReinsByLocation = async (location) => {
   return res.rows;
 };
 
-const getAllReins = async () => {
+const getAllReins = async (serverId) => {
   let client;
   let res;
   try {
+    await createReinsTable(serverId);
     client = await setupClient();
 
-    res = await client.query('SELECT * FROM reinsv1');
+    res = await client.query(`SELECT * FROM reinsv1_${serverId}`);
   } catch (err) {
     console.error('Error retrieving reins', err);
   } finally {
@@ -112,20 +116,56 @@ const getAllReins = async () => {
     }
   }
 
+  // console.log('res.rows', res.rows);
   return res.rows;
 };
 
-const addReins = async (reinInfo) => {
+const addReins = async (reinInfo, serverId) => {
   let client;
   try {
+    await createReinsTable(serverId);
     client = await setupClient();
 
     // TODO: move query to variable
     const values = [_.trim(_.toLower(reinInfo.location)), reinInfo.username,
       reinInfo.nickname, reinInfo.count];
-    await client.query('INSERT INTO reinsv1(location, username, nickname, count, timeAdded) VALUES($1, $2, $3, $4, NOW())', values);
+    await client.query(`INSERT INTO reinsv1_${serverId}(location, username, nickname, count, timeAdded) VALUES($1, $2, $3, $4, NOW())`, values);
   } catch (err) {
     console.error('Error adding reins', err);
+  } finally {
+    if (client) {
+      await client.end();
+    }
+  }
+};
+
+const addSitter = async (reinInfo, serverId) => {
+  let client;
+  try {
+    await createReinsTable(serverId);
+    client = await setupClient();
+
+    // TODO: move query to variable
+    const values = [_.trim(_.toLower(reinInfo.location)), reinInfo.username,
+      reinInfo.nickname, reinInfo.count];
+    await client.query(`INSERT INTO reinsv1_${serverId}(location, username, nickname, count, timeAdded, isSitter) VALUES($1, $2, $3, $4, NOW(), true)`, values);
+  } catch (err) {
+    console.error('Error adding reins', err);
+  } finally {
+    if (client) {
+      await client.end();
+    }
+  }
+};
+
+const removeSitter = async (location, serverId) => {
+  let client;
+  try {
+    client = await setupClient();
+
+    await client.query(`DELETE FROM ONLY reinsv1_${serverId} WHERE location = $1 AND isSitter = true`, [_.trim(_.toLower(location))]);
+  } catch (err) {
+    console.error(`Error deleting reins from ${location}`, err);
   } finally {
     if (client) {
       await client.end();
@@ -138,6 +178,8 @@ module.exports = {
   getAllReins,
   getReinsByLocation,
   addReins,
+  addSitter,
   removeReins,
+  removeSitter,
   deleteReinsFromLocation,
 };
