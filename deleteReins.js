@@ -18,7 +18,7 @@ const deleteReins = async (message) => {
 
 const deleteReinsFromLocation = async (message) => {
   let location = _.trim(_.replace(message.content, /^!delreinsall/gi, ''));
-  location = _.trim(_.replace(message.content, /^!surrender/gi, ''));
+  location = _.trim(_.replace(location, /^!surrender/gi, ''));
 
   if (location) {
     await deleteAllReinsFromLocation(location, message.guild.id);
