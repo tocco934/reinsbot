@@ -63,8 +63,27 @@ const addSitter = async (message) => {
   message.reply('Sitter Added');
 };
 
+const addReinsForOther = async (message) => {
+  const cleanedUpContent = _.trim(_.replace(message.content, /^!addreins\*/gi, ''));
+  const [name, troopCount, location] = _.split(cleanedUpContent, ';');
+  const reinsInfo = {
+    location,
+    username: name,
+    count: troopCount,
+  };
+  try {
+    await dataStore.addReins(reinsInfo, message.guild.id);
+  } catch (err) {
+    console.error(err);
+    message.reply('Error adding reins in database');
+    return;
+  }
+  message.reply('Reins Added');
+};
+
 module.exports = {
   addReins,
+  addReinsForOther,
   addSitter,
   parseMessage,
   validateCommand,
