@@ -51,6 +51,29 @@ const getReinsForLocation = async (location, serverId) => {
   Reinforcements: ${formattedReinforcers}`;
 };
 
+const getSimplifiedReins = async (message) => {
+  const reins = await dataStore.getAllReins(message.guild.id);
+
+  if (_.isEmpty(reins)) {
+    return 'No reins found.';
+  }
+
+  const reinsGroupedByLocation = _.groupBy(reins, rein => _.toLower(rein.location));
+
+  message.reply(_.join(_.map(reinsGroupedByLocation, (locationReins) => {
+    const totalReinforcements = _.sumBy(locationReins, rein => rein.count);
+    const formattedLocation = formatLocationName(locationReins[0].location);
+
+    const sitter = _.filter(locationReins, reinforcer => reinforcer.issitter === true)[0];
+    const formattedSitter = sitter ? `${sitter.username} (${sitter.nickname})` : undefined;
+
+    return `\n
+Seat of Power: ${formattedLocation}
+Sitter: ${formattedSitter}
+Total Reinforcements: ${totalReinforcements}`;
+  }), '\n\n ========='));
+};
+
 const getReinsForAll = async (serverId) => {
   const reins = await dataStore.getAllReins(serverId);
 
@@ -91,4 +114,5 @@ const getReins = async (message) => {
 
 module.exports = {
   getReins,
+  getSimplifiedReins,
 };
