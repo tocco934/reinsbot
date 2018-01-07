@@ -7,6 +7,7 @@ const addReins = require('./addReins').addReins;
 const addReinsForOther = require('./addReins').addReinsForOther;
 const addSitter = require('./addReins').addSitter;
 const getReins = require('./getReins').getReins;
+const getSimplifiedReins = require('./getReins').getSimplifiedReins;
 const deleteReins = require('./deleteReins').deleteReins;
 const deleteSitter = require('./deleteReins').deleteSitter;
 const deleteReinsFromLocation = require('./deleteReins').deleteReinsFromLocation;
@@ -31,6 +32,8 @@ const checkMessage = (message) => {
     addSitter(message);
   } else if (_.toLower(message.content).substring(0, 9) === '!getreins') {
     getReins(message);
+  } else if (_.toLower(message.content).substring(0, 9) === '!sumreins') {
+    getSimplifiedReins(message);
   } else if (_.toLower(message.content).substring(0, 12) === '!delreinsall') {
     deleteReinsFromLocation(message);
   } else if (_.toLower(message.content).substring(0, 9) === '!delreins') {
@@ -54,6 +57,7 @@ const checkMessage = (message) => {
       !addreins* <username>;<troopCount>;<seatOfPower>;
       !addsitter <troopCount> <seatOfPower>
       !getreins [<seatOfPower>] (optional)
+      !sumreins
       !delreins <id>
       !delreinsall <location>
       !delsitter <location>
