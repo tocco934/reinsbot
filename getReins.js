@@ -23,12 +23,12 @@ const formatReinforcements = (reinforcements) => {
   if (sitter && others.length) {
     const formattedSitter = formatReinforcer(sitter);
     return `
-  *-${formattedSitter}
+   *-${formattedSitter}
     --${_.join(formattedOthers, '\n  --')}`;
   } else if (sitter) {
     const formattedSitter = formatReinforcer(sitter);
     return `
-  *-${formattedSitter}`;
+   *-${formattedSitter}`;
   }
   return `
   --${_.join(formattedOthers, '\n  --')}`;
