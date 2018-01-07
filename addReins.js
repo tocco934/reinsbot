@@ -63,6 +63,30 @@ const addSitter = async (message) => {
   message.reply('Sitter Added');
 };
 
+const addSitterForOther = async (message) => {
+  let parsedMessage;
+  try {
+    const cleanedUpContent = _.trim(_.replace(message.content, /^!addSitter\*/gi, ''));
+    const [name, troopCount, location] = _.split(cleanedUpContent, ';');
+    parsedMessage = {
+      location,
+      username: name,
+      count: troopCount,
+    };
+  } catch (e) {
+    message.reply('AddSitter* Usage: !addsitter* <username>;<troopNumber>;<seat of power>');
+    return;
+  }
+  try {
+    await dataStore.addSitter(parsedMessage, message.guild.id);
+  } catch (err) {
+    console.error(err);
+    message.reply('Error setting sitter data in database');
+    return;
+  }
+  message.reply('Sitter Added');
+};
+
 const addReinsForOther = async (message) => {
   const cleanedUpContent = _.trim(_.replace(message.content, /^!addreins\*/gi, ''));
   const [name, troopCount, location] = _.split(cleanedUpContent, ';');
@@ -85,6 +109,7 @@ module.exports = {
   addReins,
   addReinsForOther,
   addSitter,
+  addSitterForOther,
   parseMessage,
   validateCommand,
 };

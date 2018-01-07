@@ -23,12 +23,12 @@ const formatReinforcements = (reinforcements) => {
   if (sitter && others.length) {
     const formattedSitter = formatReinforcer(sitter);
     return `
-    **${formattedSitter}
+  *-${formattedSitter}
     --${_.join(formattedOthers, '\n  --')}`;
   } else if (sitter) {
     const formattedSitter = formatReinforcer(sitter);
     return `
-    **${formattedSitter}`;
+  *-${formattedSitter}`;
   }
   return `
   --${_.join(formattedOthers, '\n  --')}`;
@@ -55,7 +55,7 @@ const getSimplifiedReins = async (message) => {
   const reins = await dataStore.getAllReins(message.guild.id);
 
   if (_.isEmpty(reins)) {
-    return 'No reins found.';
+    message.reply('No reins found.');
   }
 
   const reinsGroupedByLocation = _.groupBy(reins, rein => _.toLower(rein.location));
@@ -89,7 +89,7 @@ const getReinsForAll = async (serverId) => {
     const formattedLocation = formatLocationName(locationReins[0].location);
 
     return `\n
-Seat of Power: ${formattedLocation}
+Seat of Power: **${formattedLocation}**
 Total Reinforcements: ${totalReinforcements}
 Reinforcements: ${formattedReinforcers}`;
   }), '\n\n =========');
@@ -107,7 +107,7 @@ const getReins = async (message) => {
 
     message.reply(reply);
   } catch (e) {
-    console.log(e);
+    console.error(e);
     message.reply('GetReins Usage: !getreins [<seat of power>]');
   }
 };
