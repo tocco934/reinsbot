@@ -89,7 +89,7 @@ const getReinsForAll = async (serverId) => {
     const formattedLocation = formatLocationName(locationReins[0].location);
 
     return `\n
-Seat of Power: ${formattedLocation}
+Seat of Power: **${formattedLocation}**
 Total Reinforcements: ${totalReinforcements}
 Reinforcements: ${formattedReinforcers}`;
   }), '\n\n =========');
