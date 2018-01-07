@@ -11,6 +11,7 @@ const getSimplifiedReins = require('./getReins').getSimplifiedReins;
 const deleteReins = require('./deleteReins').deleteReins;
 const deleteSitter = require('./deleteReins').deleteSitter;
 const deleteReinsFromLocation = require('./deleteReins').deleteReinsFromLocation;
+const whereRein = require('./whereRein').whereRein;
 // const dataStore = require('./dataStore');
 
 const client = new Discord.Client();
@@ -40,6 +41,8 @@ const checkMessage = (message) => {
     deleteReins(message);
   } else if (_.toLower(message.content).substring(0, 10) === '!delsitter') {
     deleteSitter(message);
+  } else if (_.toLower(message.content).substring(0, 10) === '!whererein') {
+    whereRein(message);
   }
   // }
 
@@ -61,6 +64,7 @@ const checkMessage = (message) => {
       !delreins <id>
       !delreinsall <location>
       !delsitter <location>
+      !whererein
 
     For any bug reports or help ask ${process.env.username} or email ${process.env.supportEmail}
     `);
