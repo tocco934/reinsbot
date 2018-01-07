@@ -31,7 +31,7 @@ const formatReinforcements = (reinforcements) => {
     **${formattedSitter}`;
   }
   return `
-    --${_.join(formattedOthers, '\n  --')}`;
+  --${_.join(formattedOthers, '\n  --')}`;
 };
 
 const getReinsForLocation = async (location, serverId) => {
