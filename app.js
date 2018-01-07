@@ -46,6 +46,8 @@ const checkMessage = (message) => {
     deleteSitter(message);
   } else if (_.toLower(message.content).substring(0, 10) === '!whererein') {
     whereRein(message);
+  } else if (_.toLower(message.content).substring(0, 10) === '!surrender') {
+    deleteReinsFromLocation(message);
   }
   // }
 
@@ -67,8 +69,11 @@ const checkMessage = (message) => {
       !sumreins
       !delreins <id>
       !delreinsall <location>
+      !surrender <location>
       !delsitter <location>
       !whererein
+      
+      !contribute : To see info about contributing to the code
 
     For any bug reports or help ask ${process.env.username} or email ${process.env.supportEmail}
     `);
@@ -76,6 +81,10 @@ const checkMessage = (message) => {
 
   if (_.includes(_.toLower(message.content), '!ass2mouth')) {
     message.reply('You may want to check out: https://www.netflix.com/title/70123094 :)');
+  }
+
+  if (_.includes(_.toLower(message.content), '!contribute')) {
+    message.reply('You can contribute here: https://github.com/tocco934/reinsbot');
   }
 
   if (_.includes(_.toLower(message.content), '!hello')) {

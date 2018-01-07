@@ -17,13 +17,14 @@ const deleteReins = async (message) => {
 };
 
 const deleteReinsFromLocation = async (message) => {
-  const location = _.trim(_.replace(message.content, /^!delreinsall/gi, ''));
+  let location = _.trim(_.replace(message.content, /^!delreinsall/gi, ''));
+  location = _.trim(_.replace(message.content, /^!surrender/gi, ''));
 
   if (location) {
     await deleteAllReinsFromLocation(location, message.guild.id);
-    message.reply(`All reins at ${location} deleted`);
+    message.reply(`Seat ${location} Surrendered`);
   } else {
-    message.reply('Usage: !delreinsall <location>');
+    message.reply('Usage: !surrender <location>');
   }
 };
 
