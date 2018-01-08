@@ -15,6 +15,8 @@ const deleteReinsFromLocation = require('./deleteReins').deleteReinsFromLocation
 const whereRein = require('./whereRein').whereRein;
 // const dataStore = require('./dataStore');
 
+// TODO: Look into viewJS (.org ?????)
+
 const client = new Discord.Client();
 
 client.on('ready', () => {
