@@ -87,6 +87,40 @@ const whereRein = async (message) => {
   }
 };
 
+const calculateDistances = (x, y) => {
+  const locationsWithSumsAndCoords = _.map(locationsWithSums, (location) => {
+    const seatCoords = getSeatCoords(location.location);
+    const xDifference = (seatCoords.x - coords.x) > 0 ? (seatCoords.x - coords.x) : (coords.x - seatCoords.x);
+    const yDifference = (seatCoords.y - coords.y) > 0 ? (seatCoords.y - coords.y) : (coords.y - seatCoords.y);
+
+    // xDifference^2 + yDifference^2 = c^2
+    const distanceFromPlayer = Math.sqrt((xDifference ** 2) + (yDifference ** 2));
+    return {
+      ...location,
+      coords,
+      distanceFromPlayer,
+    };
+  });
+};
+
+const whereClosest = async (message) => {
+  const coords = _.trim(_.replace(message.content), /^!whereclosest/g, '');
+  if (_.isEmpty(coords)) {
+    return message.reply('Usage: !whereclosest <x>;<y>');
+  }
+
+  const [x, y] = _.split(coords, ';');
+  if (!_.isNumber(x) || !_.isNumber(y)) {
+    return message.reply('Usage: !whereclosest <x>;<y>');
+  }
+  const seatsWithDistances = calculateDistances(x, y);
+
+  const sortedSeatsWithDistances = _.sort(seatsWithDistances, 'distance');
+  const threeClosest = _.take(sortedSeatsWithDistances, 3);
+  return message.reply(_.join(_.map(threeClosest, seat => { return `${seat.location}` }), ', '));
+};
+
 module.exports = {
   whereRein,
+  whereClosest,
 };
