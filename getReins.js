@@ -6,6 +6,12 @@ const parseLocation = (contents) => {
   return commandRemoved;
 };
 
+const getCurrentSitter = reinforcements =>
+  _(reinforcements)
+    .filter('issitter')
+    .sort('timeAdded')
+    .last();
+
 const formatReinforcer = reinforcer => `[${reinforcer.id}] ${reinforcer.username} (${reinforcer.nickname}) ${reinforcer.count}`;
 
 const formatLocationName = (name) => {
@@ -15,17 +21,18 @@ const formatLocationName = (name) => {
 };
 
 const formatReinforcements = (reinforcements) => {
-  const sitter = _.filter(reinforcements, reinforcement => reinforcement.issitter === true)[0];
+  const sitter = getCurrentSitter(reinforcements);
+
   const others = _.filter(reinforcements, reinforcement => reinforcement.issitter === false);
 
   const formattedOthers = _.map(others, formatReinforcer);
 
-  if (sitter && others.length) {
+  if (sitter && !_.isEmpty(sitter) && others.length) {
     const formattedSitter = formatReinforcer(sitter);
     return `
    *-${formattedSitter}
     --${_.join(formattedOthers, '\n  --')}`;
-  } else if (sitter) {
+  } else if (sitter && !_.isEmpty(sitter)) {
     const formattedSitter = formatReinforcer(sitter);
     return `
    *-${formattedSitter}`;
@@ -64,7 +71,7 @@ const getSimplifiedReins = async (message) => {
     const totalReinforcements = _.sumBy(locationReins, rein => rein.count);
     const formattedLocation = formatLocationName(locationReins[0].location);
 
-    const sitter = _.filter(locationReins, reinforcer => reinforcer.issitter === true)[0];
+    const sitter = getCurrentSitter(locationReins);
     const formattedSitter = sitter ? `${sitter.username} (${sitter.nickname})` : undefined;
 
     return `\n
