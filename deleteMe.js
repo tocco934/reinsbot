@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const fs = require('fs');
 
 const text = `case 'acorn hall':
     case 'acornhall':
@@ -91,6 +92,11 @@ const text = `case 'acorn hall':
         x: 403,
         y: 1623,
       };
+    case 'brownhollow':
+      return {
+        x: 1245,
+        y: 909,
+      };
     case 'casterly rock':
     case 'casterlyrock':
     case 'casterly_rock':
@@ -168,6 +174,32 @@ const text = `case 'acorn hall':
       return {
         x: 580,
         y: 2000,
+      };
+    case 'dragonstone':
+      return {
+        x: 1247,
+        y: 876,
+      };
+    case 'driftmark':
+      return {
+        x: 1202,
+        y: 857,
+      };
+    case 'dun fort':
+    case 'dunfort':
+    case 'dun_fort':
+    case 'dun-fort':
+      return {
+        x: 1106,
+        y: 853,
+      };
+    case 'dyre den':
+    case 'dyreden':
+    case 'dyre_den':
+    case 'dyre-den':
+      return {
+        x: 1192,
+        y: 940,
       };
     case 'erenford':
       return {
@@ -472,6 +504,23 @@ const text = `case 'acorn hall':
         x: 700,
         y: 1046,
       };
+    case 'rooks rest':
+    case 'rooksrest':
+    case 'rooks_rest':
+    case 'rooks-rest':
+    case 'rook\'s rest':
+    case 'rook\'srest':
+    case 'rook\'s_rest':
+    case 'rook\'s-rest':
+      return {
+        x: 1170,
+        y: 899,
+      };
+    case 'rosby':
+      return {
+        x: 1065,
+        y: 803,
+      };
     case 'runestone':
       return {
         x: 1315,
@@ -497,6 +546,14 @@ const text = `case 'acorn hall':
         x: 702,
         y: 1214,
       };
+    case 'sharp point':
+    case 'sharppoint':
+    case 'sharp_point':
+    case 'sharp-point':
+      return {
+        x: 1238,
+        y: 792,
+      };
     case 'silverhill':
       return {
         x: 589,
@@ -517,6 +574,18 @@ const text = `case 'acorn hall':
         x: 1197,
         y: 1298,
       };
+    case 'sows horn':
+    case 'sowshorn':
+    case 'sows_horn':
+    case 'sows-horn':
+    case 'sow\'s horn':
+    case 'sow\'shorn':
+    case 'sow\'s_horn':
+    case 'sow\'s-horn':
+      return {
+        x: 976,
+        y: 855,
+      };
     case 'spearhead':
       return {
         x: 964,
@@ -527,6 +596,11 @@ const text = `case 'acorn hall':
         x: 552,
         y: 172,
       };
+    case 'stokeworth':
+      return {
+        x: 1022,
+        y: 845,
+      };
     case 'stone hedge':
     case 'stonehedge':
     case 'stone_hedge':
@@ -534,6 +608,11 @@ const text = `case 'acorn hall':
       return {
         x: 819,
         y: 1032,
+      };
+    case 'stonedance':
+      return {
+        x: 1247,
+        y: 749,
       };
     case 'strongsong':
       return {
@@ -552,6 +631,14 @@ const text = `case 'acorn hall':
       return {
         x: 1253,
         y: 90,
+      };
+    case 'the antlers':
+    case 'theantlers':
+    case 'the-antlers':
+    case 'the_antlers':
+      return {
+        x: 980,
+        y: 881,
       };
     case 'the arbor':
     case 'thearbor':
@@ -705,30 +792,64 @@ const cleanedUp1 = _.replace(text, '\n', '')
 const cases = _.split(cleanedUp1, ';');
 
 const getLocationName = (caseGroup) => {
-  const cases = _.split(caseGroup, 'return');
-  const cleanedUpCases = _.trim(_.replace(cases[0], 'case \'', '')
+  const newCases = _.split(caseGroup, 'return');
+  const cleanedUpCases = _.trim(_.replace(newCases[0], 'case \'', '')
     .replace('\':', ''));
   const possibleNames = _.split(cleanedUpCases, '\n');
   const formattedName = _.trim(possibleNames[0]);
+  return formattedName;
+};
+
+const getCoord = (beginning, caseToUse) => {
+  const regex = new RegExp(`${beginning}: [0-9]*`, 'g');
+  let coord = regex.exec(caseToUse)[0];
+  coord = _.replace(coord, `${beginning}: `, '');
+  coord = _.replace(coord, ',', '');
+  coord = _.trim(coord);
+  coord = _.parseInt(coord);
+  return coord;
 };
 
 const getLocationCoords = (caseGroup) => {
-  const cases = _.split(caseGroup, 'return ');
-  const xRegex = /x: [0-9]*/g;
-  const yRegex = /y: [0-9]*/g;
-  let x = xRegex.exec(cases[1]);
-  x = x[0];
-  
-
-  const y = yRegex.exec(cases[1]);
-  console.log('x', x);
+  if (caseGroup) {
+    const newCases = _.split(caseGroup, 'return ');
+    const x = getCoord('x', newCases[1]);
+    const y = getCoord('y', newCases[1]);
+    return {
+      x,
+      y,
+    };
+  }
+  return undefined;
 };
 
-const locationObject = _.map(cases, caseGroup => {
+const locationsArray = _.map(cases, (caseGroup) => {
   const locationName = getLocationName(caseGroup);
   const coords = getLocationCoords(caseGroup);
-  return 3;
+  return {
+    name: locationName,
+    coords,
+  };
 });
 
-// const coords = _.split(caseGroup, '{');
-// coords[1];
+// console.log('locationsArray', locationsArray);
+
+const locationsObject = {};
+
+_.forEach(locationsArray, (location) => {
+  locationsObject[location.name] = location;
+});
+
+// console.log('locationsObject', locationsObject);
+
+const updatedSwitchStatements = _.map(cases, (currentCase) => {
+  const locationName = getLocationName(currentCase);
+  const justCases = _.split(currentCase, 'return ');
+  return `${justCases[0]}return seatsOfPower['${locationName}'];`;
+});
+
+// console.log('updatedSwitchStatements', updatedSwitchStatements);
+
+const joinedSwitches = _.join(updatedSwitchStatements, '');
+
+console.log('joinedSwitches', joinedSwitches);
