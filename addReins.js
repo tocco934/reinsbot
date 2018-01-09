@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const dataStore = require('./dataStore');
+const seatsOfPower = require('./seatsOfPowerHelper');
 
 const validateCommand = (splitMessage) => {
   if (splitMessage.length < 2
@@ -19,11 +20,14 @@ const parseMessage = (message) => {
   const splitMessage = _.split(messageContents, ' ');
   validateCommand(splitMessage);
 
+  const givenLocation = _.trim(_.join(_.drop(splitMessage, 1), ' '));
+  const locationName = _.get(seatsOfPower.getSeatOfPowerDetails(_.trim(givenLocation)), 'name', givenLocation);
+
   return {
     username: message.author.username,
     nickname: _.get(message, 'member.nickname', ''),
     count: parseInt(splitMessage[0]),
-    location: _.toLower(_.join(_.drop(splitMessage, 1), ' ')),
+    location: locationName,
   };
 };
 
@@ -67,9 +71,12 @@ const addSitterForOther = async (message) => {
   let parsedMessage;
   try {
     const cleanedUpContent = _.trim(_.replace(message.content, /^!addSitter\*/gi, ''));
-    const [name, troopCount, location] = _.split(cleanedUpContent, ';');
+    const [name, troopCount, givenLocation] = _.split(cleanedUpContent, ';');
+
+    const locationName = _.get(seatsOfPower.getSeatOfPowerDetails(_.trim(givenLocation)), 'name', givenLocation);
+
     parsedMessage = {
-      location,
+      location: locationName,
       username: name,
       count: troopCount,
     };
@@ -89,9 +96,12 @@ const addSitterForOther = async (message) => {
 
 const addReinsForOther = async (message) => {
   const cleanedUpContent = _.trim(_.replace(message.content, /^!addreins\*/gi, ''));
-  const [name, troopCount, location] = _.split(cleanedUpContent, ';');
+  const [name, troopCount, givenLocation] = _.split(cleanedUpContent, ';');
+
+  const locationName = _.get(seatsOfPower.getSeatOfPowerDetails(_.trim(givenLocation)), 'name', givenLocation);
+
   const reinsInfo = {
-    location,
+    location: locationName,
     username: name,
     count: troopCount,
   };
