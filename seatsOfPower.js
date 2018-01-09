@@ -93,6 +93,11 @@ const getSeatOfPowerPosition = (seatName) => {
         x: 403,
         y: 1623,
       };
+    case 'brownhollow':
+      return {
+        x: 1245,
+        y: 909,
+      };
     case 'casterly rock':
     case 'casterlyrock':
     case 'casterly_rock':
@@ -170,6 +175,32 @@ const getSeatOfPowerPosition = (seatName) => {
       return {
         x: 580,
         y: 2000,
+      };
+    case 'dragonstone':
+      return {
+        x: 1247,
+        y: 876,
+      };
+    case 'driftmark':
+      return {
+        x: 1202,
+        y: 857,
+      };
+    case 'dun fort':
+    case 'dunfort':
+    case 'dun_fort':
+    case 'dun-fort':
+      return {
+        x: 1106,
+        y: 853,
+      };
+    case 'dyre den':
+    case 'dyreden':
+    case 'dyre_den':
+    case 'dyre-den':
+      return {
+        x: 1192,
+        y: 940,
       };
     case 'erenford':
       return {
@@ -474,6 +505,23 @@ const getSeatOfPowerPosition = (seatName) => {
         x: 700,
         y: 1046,
       };
+    case 'rooks rest':
+    case 'rooksrest':
+    case 'rooks_rest':
+    case 'rooks-rest':
+    case 'rook\'s rest':
+    case 'rook\'srest':
+    case 'rook\'s_rest':
+    case 'rook\'s-rest':
+      return {
+        x: 1170,
+        y: 899,
+      };
+    case 'rosby':
+      return {
+        x: 1065,
+        y: 803,
+      };
     case 'runestone':
       return {
         x: 1315,
@@ -499,6 +547,14 @@ const getSeatOfPowerPosition = (seatName) => {
         x: 702,
         y: 1214,
       };
+    case 'sharp point':
+    case 'sharppoint':
+    case 'sharp_point':
+    case 'sharp-point':
+      return {
+        x: 1238,
+        y: 792,
+      };
     case 'silverhill':
       return {
         x: 589,
@@ -519,6 +575,18 @@ const getSeatOfPowerPosition = (seatName) => {
         x: 1197,
         y: 1298,
       };
+    case 'sows horn':
+    case 'sowshorn':
+    case 'sows_horn':
+    case 'sows-horn':
+    case 'sow\'s horn':
+    case 'sow\'shorn':
+    case 'sow\'s_horn':
+    case 'sow\'s-horn':
+      return {
+        x: 976,
+        y: 855,
+      };
     case 'spearhead':
       return {
         x: 964,
@@ -529,6 +597,11 @@ const getSeatOfPowerPosition = (seatName) => {
         x: 552,
         y: 172,
       };
+    case 'stokeworth':
+      return {
+        x: 1022,
+        y: 845,
+      };
     case 'stone hedge':
     case 'stonehedge':
     case 'stone_hedge':
@@ -536,6 +609,11 @@ const getSeatOfPowerPosition = (seatName) => {
       return {
         x: 819,
         y: 1032,
+      };
+    case 'stonedance':
+      return {
+        x: 1247,
+        y: 749,
       };
     case 'strongsong':
       return {
@@ -554,6 +632,14 @@ const getSeatOfPowerPosition = (seatName) => {
       return {
         x: 1253,
         y: 90,
+      };
+    case 'the antlers':
+    case 'theantlers':
+    case 'the-antlers':
+    case 'the_antlers':
+      return {
+        x: 980,
+        y: 881,
       };
     case 'the arbor':
     case 'thearbor':
