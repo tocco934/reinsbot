@@ -1,9 +1,13 @@
 const _ = require('lodash');
 const dataStore = require('./dataStore');
+const seatsOfPower = require('./seatsOfPowerHelper');
 
 const parseLocation = (contents) => {
   const commandRemoved = _.trim(_.replace(contents, /^!getreins/gi, ''));
-  return commandRemoved;
+  if (commandRemoved) {
+    return _.get(seatsOfPower.getSeatOfPowerDetails(_.trim(commandRemoved)), 'name', commandRemoved);
+  }
+  return undefined;
 };
 
 const getCurrentSitter = reinforcements =>
@@ -106,6 +110,7 @@ const getReins = async (message) => {
   try {
     let reply;
     const location = parseLocation(message.content);
+
     if (_.isEmpty(location)) {
       reply = await getReinsForAll(message.guild.id);
     } else {

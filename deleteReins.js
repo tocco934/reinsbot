@@ -2,6 +2,7 @@ const _ = require('lodash');
 const deleteReinsFromDb = require('./dataStore').removeReins;
 const deleteAllReinsFromLocation = require('./dataStore').deleteReinsFromLocation;
 const removeSitter = require('./dataStore').removeSitter;
+const seatsOfPower = require('./seatsOfPowerHelper');
 
 const deleteReins = async (message) => {
   const messageParams = _.replace(message.content, /^!delreins/gi, '');
@@ -19,6 +20,8 @@ const deleteReins = async (message) => {
 const deleteReinsFromLocation = async (message) => {
   let location = _.trim(_.replace(message.content, /^!delreinsall/gi, ''));
   location = _.trim(_.replace(location, /^!surrender/gi, ''));
+  location = _.get(seatsOfPower.getSeatOfPowerDetails(location), 'name', location);
+
 
   if (location) {
     await deleteAllReinsFromLocation(location, message.guild.id);
@@ -29,7 +32,8 @@ const deleteReinsFromLocation = async (message) => {
 };
 
 const deleteSitter = async (message) => {
-  const location = _.trim(_.replace(message.content, /^!delsitter/gi, ''));
+  let location = _.trim(_.replace(message.content, /^!delsitter/gi, ''));
+  location = _.get(seatsOfPower.getSeatOfPowerDetails(location), 'name', location);
 
   if (location) {
     await removeSitter(location, message.guild.id);
