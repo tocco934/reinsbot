@@ -173,6 +173,25 @@ const removeSitter = async (location, serverId) => {
   }
 };
 
+const fixShit = async (message) => {
+  const serverId = message.guild.id;
+
+  let client;
+  try {
+    client = await setupClient();
+
+    await client.query(`DELETE FROM ONLY reinsv1_${serverId} WHERE location = 'hornhill'`);
+    message.reply('Fixed Shit');
+  } catch (err) {
+    console.error('Error fixing shit', err);
+    message.reply('Fixing shit broke!');
+  } finally {
+    if (client) {
+      await client.end();
+    }
+  }
+};
+
 module.exports = {
   createReinsTable,
   getAllReins,
@@ -182,4 +201,5 @@ module.exports = {
   removeReins,
   removeSitter,
   deleteReinsFromLocation,
+  fixShit,
 };
