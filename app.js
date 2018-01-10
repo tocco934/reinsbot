@@ -51,7 +51,7 @@ const checkMessage = (message) => {
     whereRein(message);
   } else if (_.toLower(message.content).substring(0, 10) === '!surrender') {
     deleteReinsFromLocation(message);
-  } else if (_.toLower(message.content).substring(0, 8) === '!iamdumb') {
+  } else if (_.toLower(message.content).substring(0, 8) === '!fixshit') {
     dataStore.fixShit(message);
   }
   // else if (_.toLower(message.content).substring(0, 13) === '!whereclosest') {
