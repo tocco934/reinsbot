@@ -286,6 +286,9 @@ const getSeatOfPowerDetails = (seatName) => {
     case 'rillwater-crossing':
       return seatsOfPower['rillwater crossing'];
     case 'riverrun':
+    case 'river run':
+    case 'river_run':
+    case 'river-run':
       return seatsOfPower.riverrun;
     case 'rooks rest':
     case 'rooksrest':

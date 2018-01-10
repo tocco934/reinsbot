@@ -200,23 +200,6 @@ const removeSitter = async (location, serverId) => {
   }
 };
 
-const addInactiveSeat = async (serverId, seatName) => {
-  let client;
-  try {
-    client = await setupClient();
-
-    const values = [seatName];
-    const insertStatement = `INSERT INTO seatstatusv1_${serverId}(location, inactive, timeAdded) VALUES ($1, true, NOW())`;
-    await client.query(insertStatement, values);
-  } catch (err) {
-    console.error(`Error setting seat ${seatName} inactive`, err);
-  } finally {
-    if (client) {
-      await client.end();
-    }
-  }
-};
-
 const removeInactiveSeat = async (serverId, seatName) => {
   let client;
   try {
@@ -258,12 +241,7 @@ const getInactiveSeat = async (serverId, seatName) => {
     await setupTables(serverId);
     client = await setupClient();
 
-    const query = {
-      text: `SELECT * FROM seatstatusv1_${serverId} WHERE location = $1`,
-      values: [seatName],
-    };
-
-    res = await client.query(query);
+    res = await client.query(`SELECT * FROM seatstatusv1_${serverId} WHERE location = $1`, [seatName]);
   } catch (err) {
     console.error(`Error retrieving inactive seat ${seatName}`, err);
   } finally {
@@ -273,6 +251,26 @@ const getInactiveSeat = async (serverId, seatName) => {
   }
 
   return res.rows;
+};
+
+const addInactiveSeat = async (serverId, seatName) => {
+  let client;
+  try {
+    client = await setupClient();
+
+    const inactiveSeat = await getInactiveSeat(serverId, seatName);
+    if (_.isEmpty(inactiveSeat)) {
+      const values = [seatName];
+      const insertStatement = `INSERT INTO seatstatusv1_${serverId}(location, inactive, timeAdded) VALUES ($1, true, NOW())`;
+      await client.query(insertStatement, values);
+    }
+  } catch (err) {
+    console.error(`Error setting seat ${seatName} inactive`, err);
+  } finally {
+    if (client) {
+      await client.end();
+    }
+  }
 };
 
 module.exports = {

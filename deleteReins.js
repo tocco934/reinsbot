@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const deleteReinsFromDb = require('./dataStore').removeReins;
 const deleteAllReinsFromLocation = require('./dataStore').deleteReinsFromLocation;
+const deleteInactiveSeat = require('./dataStore').removeInactiveSeat;
 const removeSitter = require('./dataStore').removeSitter;
 const seatsOfPower = require('./seatsOfPowerHelper');
 
@@ -25,6 +26,7 @@ const deleteReinsFromLocation = async (message) => {
 
   if (location) {
     await deleteAllReinsFromLocation(location, message.guild.id);
+    await deleteInactiveSeat(message.guild.id, location);
     message.reply(`Seat ${location} Surrendered`);
   } else {
     message.reply('Usage: !surrender <location>');

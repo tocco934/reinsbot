@@ -21,7 +21,7 @@ const parseMessage = (message) => {
   validateCommand(splitMessage);
 
   const givenLocation = _.trim(_.join(_.drop(splitMessage, 1), ' '));
-  const locationName = _.get(seatsOfPower.getSeatOfPowerDetails(_.trim(givenLocation)), 'name', givenLocation);
+  const locationName = _.get(seatsOfPower.getSeatOfPowerDetails(_.trim(givenLocation)), 'name', _.trim(givenLocation));
 
   return {
     username: message.author.username,
@@ -36,17 +36,20 @@ const addReins = async (message) => {
   try {
     parsedMessage = parseMessage(message);
   } catch (e) {
-    message.reply('AddReins Usage: !addreins <troopNumber> <seat of power>');
-    return;
+    return message.reply('AddReins Usage: !addreins <troopNumber> <seat of power>');
   }
   try {
     await dataStore.addReins(parsedMessage, message.guild.id);
   } catch (err) {
     console.error(err);
-    message.reply('Error saving rein data in database');
-    return;
+    return message.reply('Error saving rein data in database');
   }
-  message.reply('Reins Added');
+
+  const inactiveSeats = await dataStore.getInactiveSeat(message.guild.id, parsedMessage.location);
+  if (!_.isEmpty(inactiveSeats)) {
+    return message.reply('**WARNING: This seat has been marked as inactive.** Reins have been added, but you should ask/consider if you should choose another seat to rein.');
+  }
+  return message.reply('Reins Added');
 };
 
 const addSitter = async (message) => {
@@ -54,17 +57,20 @@ const addSitter = async (message) => {
   try {
     parsedMessage = parseMessage(message);
   } catch (e) {
-    message.reply('AddSitter Usage: !addsitter <troopNumber> <seat of power>');
-    return;
+    return message.reply('AddSitter Usage: !addsitter <troopNumber> <seat of power>');
   }
   try {
     await dataStore.addSitter(parsedMessage, message.guild.id);
   } catch (err) {
     console.error(err);
-    message.reply('Error setting sitter data in database');
-    return;
+    return message.reply('Error setting sitter data in database');
   }
-  message.reply('Sitter Added');
+
+  const inactiveSeats = await dataStore.getInactiveSeat(message.guild.id, parsedMessage.location);
+  if (!_.isEmpty(inactiveSeats)) {
+    return message.reply('**WARNING: This seat has been marked as inactive.** Sitter has been added but make sure you still want this seat marked as disabled.');
+  }
+  return message.reply('Sitter Added');
 };
 
 const addSitterForOther = async (message) => {
@@ -81,17 +87,20 @@ const addSitterForOther = async (message) => {
       count: troopCount,
     };
   } catch (e) {
-    message.reply('AddSitter* Usage: !addsitter* <username>;<troopNumber>;<seat of power>');
-    return;
+    return message.reply('AddSitter* Usage: !addsitter* <username>;<troopNumber>;<seat of power>');
   }
   try {
     await dataStore.addSitter(parsedMessage, message.guild.id);
   } catch (err) {
     console.error(err);
-    message.reply('Error setting sitter data in database');
-    return;
+    return message.reply('Error setting sitter data in database');
   }
-  message.reply('Sitter Added');
+
+  const inactiveSeats = await dataStore.getInactiveSeat(message.guild.id, parsedMessage.location);
+  if (!_.isEmpty(inactiveSeats)) {
+    return message.reply('**WARNING: This seat has been marked as inactive.** Sitter has been added but make sure you still want this seat marked as disabled.');
+  }
+  return message.reply('Sitter Added');
 };
 
 const addReinsForOther = async (message) => {
@@ -109,10 +118,14 @@ const addReinsForOther = async (message) => {
     await dataStore.addReins(reinsInfo, message.guild.id);
   } catch (err) {
     console.error(err);
-    message.reply('Error adding reins in database');
-    return;
+    return message.reply('Error adding reins in database');
   }
-  message.reply('Reins Added');
+
+  const inactiveSeats = await dataStore.getInactiveSeat(message.guild.id, locationName);
+  if (!_.isEmpty(inactiveSeats)) {
+    return message.reply('**WARNING: This seat has been marked as inactive.** Reins have been added, but you should ask/consider if you should choose another seat to rein.');
+  }
+  return message.reply('Reins Added');
 };
 
 module.exports = {

@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const Promise = require('bluebird');
 const dataStore = require('./dataStore');
 const seatsOfPower = require('./seatsOfPowerHelper');
 
@@ -55,9 +56,11 @@ const getReinsForLocation = async (location, serverId) => {
     return `No reins found for ${formattedLocation}`;
   }
 
+  const inactiveSeat = await dataStore.getInactiveSeat(serverId, _.toLower(formattedLocation));
+
   const formattedReinforcers = formatReinforcements(entriesForLocation);
   return `\n
-  Seat of Power: ${formattedLocation}
+  Seat of Power: ${formattedLocation} ${_.isEmpty(inactiveSeat) ? '' : '- **INACTIVE**'}
   Total Reinforcements: ${totalReinforcements}\n
   Reinforcements: ${formattedReinforcers}`;
 };
@@ -71,18 +74,23 @@ const getSimplifiedReins = async (message) => {
 
   const reinsGroupedByLocation = _.groupBy(reins, rein => _.toLower(rein.location));
 
-  message.reply(_.join(_.map(reinsGroupedByLocation, (locationReins) => {
+  const messagesToSend = await Promise.all(_.map(reinsGroupedByLocation, async (locationReins) => {
     const totalReinforcements = _.sumBy(locationReins, rein => rein.count);
     const formattedLocation = formatLocationName(locationReins[0].location);
 
     const sitter = getCurrentSitter(locationReins);
     const formattedSitter = sitter ? `${sitter.username} (${sitter.nickname})` : undefined;
 
+    const inactiveSeat =
+      await dataStore.getInactiveSeat(message.guild.id, _.toLower(formattedLocation));
+
     return `\n
-Seat of Power: ${formattedLocation}
+Seat of Power: ${formattedLocation} ${_.isEmpty(inactiveSeat) ? '' : '- **INACTIVE**'}
 Sitter: ${formattedSitter}
 Total Reinforcements: ${totalReinforcements}`;
-  }), '\n\n ========='));
+  }));
+
+  message.reply(_.join(messagesToSend, '\n\n ========='));
 };
 
 const getReinsForAll = async (serverId) => {
@@ -94,16 +102,22 @@ const getReinsForAll = async (serverId) => {
 
   const reinsGroupedByLocation = _.groupBy(reins, rein => _.toLower(rein.location));
 
-  return _.join(_.map(reinsGroupedByLocation, (locationReins) => {
+  const messageToSend = await Promise.all(_.map(reinsGroupedByLocation, async (locationReins) => {
     const totalReinforcements = _.sumBy(locationReins, rein => rein.count);
     const formattedReinforcers = formatReinforcements(locationReins);
     const formattedLocation = formatLocationName(locationReins[0].location);
 
+    const inactiveSeat =
+      await dataStore.getInactiveSeat(serverId, _.toLower(formattedLocation));
+
     return `\n
-Seat of Power: **${formattedLocation}**
+Seat of Power: **${formattedLocation}** ${_.isEmpty(inactiveSeat) ? '' : '- **INACTIVE**'}
 Total Reinforcements: ${totalReinforcements}
 Reinforcements: ${formattedReinforcers}`;
-  }), '\n\n =========');
+  }));
+
+
+  return _.join(messageToSend, '\n\n =========');
 };
 
 const getReins = async (message) => {
