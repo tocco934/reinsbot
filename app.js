@@ -14,7 +14,8 @@ const deleteSitter = require('./deleteReins').deleteSitter;
 const deleteReinsFromLocation = require('./deleteReins').deleteReinsFromLocation;
 const whereRein = require('./whereRein').whereRein;
 const whereClosest = require('./whereRein').whereClosest;
-const dataStore = require('./dataStore');
+const whereClosestAll = require('./whereRein').whereClosestAll;
+// const dataStore = require('./dataStore');
 
 // TODO: Look into viewJS (.org ?????)
 
@@ -52,11 +53,12 @@ const checkMessage = (message) => {
   } else if (_.toLower(message.content).substring(0, 10) === '!surrender') {
     deleteReinsFromLocation(message);
   } else if (_.toLower(message.content).substring(0, 8) === '!fixshit') {
-    dataStore.fixShit(message);
+    message.reply('Nothing To Fix!');
+  } else if (_.toLower(message.content).substring(0, 16) === '!whereclosestall') {
+    whereClosestAll(message);
+  } else if (_.toLower(message.content).substring(0, 13) === '!whereclosest') {
+    whereClosest(message);
   }
-  // else if (_.toLower(message.content).substring(0, 13) === '!whereclosest') {
-  //   whereClosest(message);
-  // }
   // }
 
   // if (_.toLower(message.content).substring(0, 5) === '!test') {

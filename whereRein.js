@@ -1,58 +1,12 @@
 const _ = require('lodash');
 const dataStore = require('./dataStore');
-const getSeatCoords = require('./seatsOfPower').getSeatOfPowerPosition;
+const seatsOfPower = require('./seatsOfPower');
 
 const formatLocationName = (name) => {
   const splitUpName = _.split(name, ' ');
   const formattedName = _.map(splitUpName, _.capitalize);
   return _.join(formattedName, ' ');
 };
-
-// const whereReinWithCoords = async (message) => {
-//   try {
-//     let coords = _.trim(_.replace(message.content), /^!whererein/g, '');
-//     coords = _.split(coords, ';');
-//     coords = {
-//       x: _.parseInt(coords[0]),
-//       y: _.parseInt(coords[1]),
-//     };
-
-//     const reins = await dataStore.getAllReins(message.guild.id);
-
-//     if (_.isEmpty(reins)) {
-//       message.reply('No reins found.');
-//     }
-
-//     const reinsGroupedByLocation = _.groupBy(reins, rein => _.toLower(rein.location));
-//     const locationsWithSums = _.map(reinsGroupedByLocation, (locationReins) => {
-//       const totalReinforcements = _.sumBy(locationReins, rein => rein.count);
-//       return {
-//         location: formatLocationName(locationReins[0].location),
-//         count: totalReinforcements,
-//       };
-//     });
-
-//     const locationsWithSumsAndCoords = _.map(locationsWithSums, (location) => {
-//       const seatCoords = getSeatCoords(location.location);
-//       const xDifference = (seatCoords.x - coords.x) > 0 ? (seatCoords.x - coords.x) : (coords.x - seatCoords.x);
-//       const yDifference = (seatCoords.y - coords.y) > 0 ? (seatCoords.y - coords.y) : (coords.y - seatCoords.y);
-
-//       // xDifference^2 + yDifference^2 = c^2
-//       const distanceFromPlayer = Math.sqrt((xDifference ** 2) + (yDifference ** 2));
-//       return {
-//         ...location,
-//         coords,
-//         distanceFromPlayer,
-//       };
-//     });
-
-//     // TODO Sort by distanceFromPlayer?
-//     // TODO How does reins sum factor in??
-//   } catch (err) {
-//     console.error(err);
-//     message.reply('Could not figure out where to send reins.');
-//   }
-// };
 
 const whereRein = async (message) => {
   // if (_.trim(_.replace(message.content), /^!whererein/g, '')) {
@@ -87,40 +41,71 @@ const whereRein = async (message) => {
   // }
 };
 
-// const calculateDistances = (x, y) => {
-//   const locationsWithSumsAndCoords = _.map(locationsWithSums, (location) => {
-//     const seatCoords = getSeatCoords(location.location);
-//     const xDifference = (seatCoords.x - coords.x) > 0 ? (seatCoords.x - coords.x) : (coords.x - seatCoords.x);
-//     const yDifference = (seatCoords.y - coords.y) > 0 ? (seatCoords.y - coords.y) : (coords.y - seatCoords.y);
+const calculateDistances = (x, y) =>
+  _.map(seatsOfPower, (seat) => {
+    const xDifference = (seat.coords.x - x) > 0 ? (seat.coords.x - x) : (x - seat.coords.x);
+    const yDifference = (seat.coords.y - y) > 0 ? (seat.coords.y - y) : (y - seat.coords.y);
+    const distanceFromPlayer = Math.sqrt((xDifference ** 2) + (yDifference ** 2));
 
-//     // xDifference^2 + yDifference^2 = c^2
-//     const distanceFromPlayer = Math.sqrt((xDifference ** 2) + (yDifference ** 2));
-//     return {
-//       ...location,
-//       coords,
-//       distanceFromPlayer,
-//     };
-//   });
-// };
+    return {
+      ...seat,
+      distance: distanceFromPlayer,
+    };
+  });
 
-// const whereClosest = async (message) => {
-//   const coords = _.trim(_.replace(message.content), /^!whereclosest/g, '');
-//   if (_.isEmpty(coords)) {
-//     return message.reply('Usage: !whereclosest <x>;<y>');
-//   }
+const getSeatsWithCalculatedDistances = (message, command) => {
+  const commandRegex = new RegExp(`^${command}`, 'g');
+  const coords = _.trim(_.replace(message.content), commandRegex, '');
+  if (_.isEmpty(coords)) {
+    throw new Error('No Coords Included!');
+  }
 
-//   const [x, y] = _.split(coords, ';');
-//   if (!_.isNumber(x) || !_.isNumber(y)) {
-//     return message.reply('Usage: !whereclosest <x>;<y>');
-//   }
-//   const seatsWithDistances = calculateDistances(x, y);
+  let [x, y] = _.split(_.trim(coords), ';');
+  x = _.parseInt(x);
+  y = _.parseInt(y);
+  if (!_.isNumber(x) || !_.isNumber(y)) {
+    throw new Error('coords cannot be parsed into integers');
+  }
+  const seatsWithDistances = calculateDistances(x, y);
 
-//   const sortedSeatsWithDistances = _.sort(seatsWithDistances, 'distance');
-//   const threeClosest = _.take(sortedSeatsWithDistances, 3);
-//   return message.reply(_.join(_.map(threeClosest, seat => `${seat.location}`), ', '));
-// };
+  return _.sortBy(seatsWithDistances, 'distance');
+};
+
+const whereClosest = async (message) => {
+  let seats;
+  try {
+    seats = getSeatsWithCalculatedDistances(message, '!whereclosest');
+  } catch (e) {
+    console.log(e);
+    return message.reply('Usage: !whereclosest <x>;<y>');
+  }
+
+  const reins = await dataStore.getAllReins(message.guild.id);
+  const uniqueLocations = _.unionBy(reins, 'location').map(rein => rein.location);
+  const seatsWeOwn = _.filter(seats, seat => _.includes(uniqueLocations, seat.name));
+
+  const threeClosest = _.take(seatsWeOwn, 3);
+  if (_.isEmpty(threeClosest)) {
+    return message.reply('No nearby seats found. Try setting some reins first!');
+  }
+  return message.reply(_.join(_.map(threeClosest, seat => `${seat.name}`), ', '));
+};
+
+const whereClosestAll = async (message) => {
+  let seats;
+  try {
+    seats = getSeatsWithCalculatedDistances(message, '!whereclosestall');
+  } catch (e) {
+    console.log(e);
+    return message.reply('Usage: !whereclosestall <x>;<y>');
+  }
+
+  const threeClosest = _.take(seats, 3);
+  return message.reply(_.join(_.map(threeClosest, seat => `${seat.name}`), ', '));
+};
 
 module.exports = {
   whereRein,
-  // whereClosest,
+  whereClosest,
+  whereClosestAll,
 };
