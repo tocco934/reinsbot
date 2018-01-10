@@ -3,36 +3,63 @@ module.exports = {
   {
     name: 'acorn hall',
     coords: { x: 735, y: 994 },
+    region: 'The Riverlands',
   },
   ashemark: {
     name: 'ashemark',
     coords: { x: 494, y: 1005 },
+    region: 'Westerlands',
   },
   'ashford castle': {
     name: 'ashford castle',
     coords: { x: 744, y: 465 },
+    region: 'The Reach',
   },
   'baelish castle': {
     name: 'baelish castle',
     coords: { x: 1136, y: 1405 },
+    region: 'The Vale',
   },
   bandallon: {
     name: 'bandallon',
     coords: { x: 308, y: 384 },
+    region: 'The Reach',
   },
   'barrow hall': {
     name: 'barrow hall',
     coords: { x: 611, y: 1642 },
+    region: 'The North',
   },
   'bear island': {
     name: 'bear island',
     coords: { x: 578, y: 2151 },
+    region: 'The North',
   },
-  bitterbridge: { name: 'bitterbridge', coords: { x: 746, y: 610 } },
-  blackcrown: { name: 'blackcrown', coords: { x: 290, y: 233 } },
-  blackmonth: { name: 'blackmonth', coords: { x: 600, y: 262 } },
-  'bloody gate': { name: 'bloody gate', coords: { x: 1044, y: 1029 } },
-  bluespine: { name: 'bluespine', coords: { x: 873, y: 853 } },
+  bitterbridge: {
+    name: 'bitterbridge',
+    coords: { x: 746, y: 610 },
+    region: 'The Reach',
+  },
+  blackcrown: {
+    name: 'blackcrown',
+    coords: { x: 290, y: 233 },
+    region: 'The Reach',
+  },
+  blackmont: {
+    name: 'blackmont',
+    coords: { x: 600, y: 262 },
+    region: 'Dorne',
+  },
+  'bloody gate': {
+    name: 'bloody gate',
+    coords: { x: 1044, y: 1029 },
+    region: 'The Vale',
+  },
+  bluespine: {
+    name: 'bluespine',
+    coords: { x: 873, y: 853 },
+    region: 'The Riverlands',
+  },
   'brightwater keep': { name: 'brightwater keep', coords: { x: 385, y: 363 } },
   bronzehearth: { name: 'bronzehearth', coords: { x: 403, y: 1623 } },
   brownhollow: { name: 'brownhollow', coords: { x: 1245, y: 909 } },

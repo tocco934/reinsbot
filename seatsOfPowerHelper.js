@@ -36,8 +36,8 @@ const getSeatOfPowerDetails = (seatName) => {
       return seatsOfPower.bitterbridge;
     case 'blackcrown':
       return seatsOfPower.blackcrown;
-    case 'blackmonth':
-      return seatsOfPower.blackmonth;
+    case 'blackmont':
+      return seatsOfPower.blackmont;
     case 'bloody gate':
     case 'bloodygate':
     case 'bloody_gate':
