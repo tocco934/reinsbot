@@ -82,6 +82,8 @@ const checkMessage = (message) => {
       !surrender <location>
       !delsitter <location>
       !whererein
+      !whereclosest <x>;<y>
+      !whereclosestall <x>;<y>
       
       !contribute : To see info about contributing to the code
 
