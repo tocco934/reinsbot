@@ -29,7 +29,13 @@ const whereRein = async (message) => {
     });
 
     const orderedByLowest = _.sortBy(locationsWithSums, 'count');
-    const lowestThree = _.take(orderedByLowest, 3);
+
+    const inactiveSeats = await dataStore.getInactiveSeats(message.guild.id);
+    const inactiveSeatNames = _.map(inactiveSeats, 'location');
+    const activeSeatsWeOwn = _.filter(orderedByLowest, seat =>
+      !_.includes(inactiveSeatNames, _.toLower(seat.location)));
+
+    const lowestThree = _.take(activeSeatsWeOwn, 3);
     const lowestThreeLocations = _.map(lowestThree, loc => loc.location);
 
     const replyMessage = _.join(lowestThreeLocations, ', ');
@@ -84,7 +90,12 @@ const whereClosest = async (message) => {
   const uniqueLocations = _.unionBy(reins, 'location').map(rein => rein.location);
   const seatsWeOwn = _.filter(seats, seat => _.includes(uniqueLocations, seat.name));
 
-  const threeClosest = _.take(seatsWeOwn, 3);
+  const inactiveSeats = await dataStore.getInactiveSeats(message.guild.id);
+  const inactiveSeatNames = _.map(inactiveSeats, 'location');
+  const activeSeatsWeOwn = _.filter(seatsWeOwn, seat =>
+    !_.includes(inactiveSeatNames, _.toLower(seat.name)));
+
+  const threeClosest = _.take(activeSeatsWeOwn, 3);
   if (_.isEmpty(threeClosest)) {
     return message.reply('No nearby seats found. Try setting some reins first!');
   }
