@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const { Client } = require('pg');
 const optional = require('optional');
+const Promise = require('bluebird');
 
 const settings = optional('./settings');
 
@@ -69,8 +70,7 @@ const createInactiveTable = async (serverId) => {
 };
 
 const setupTables = async (serverId) => {
-  await createReinsTable(serverId);
-  await createInactiveTable(serverId);
+  await Promise.all([createReinsTable(serverId), createInactiveTable(serverId)]);
 };
 
 const removeReins = async (id, serverId) => {

@@ -12,7 +12,7 @@ const disableSeat = async (message) => {
   const locationName = _.get(seatsOfPower.getSeatOfPowerDetails(_.trim(givenLocation)), 'name', givenLocation);
 
   await dataStore.addInactiveSeat(message.guild.id, locationName);
-  return message.reply(`<@everyone> ${locationName} marked as inactive. Please do not send reins there and please pull any existing reins back`);
+  return message.reply(`@everyone ${locationName} marked as inactive. Please do not send reins there and please pull any existing reins back`);
 };
 
 const enableSeat = async (message) => {

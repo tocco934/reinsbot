@@ -98,7 +98,7 @@ const checkMessage = (message) => {
     !delsitter <location>
 
     **Seats**
-    !disabledSeats
+    !disabledseats
     !disableseat <seat name>
     !enableseat <seat name>
     !surrender <location>
