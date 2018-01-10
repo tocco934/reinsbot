@@ -15,6 +15,9 @@ const deleteReinsFromLocation = require('./deleteReins').deleteReinsFromLocation
 const whereRein = require('./whereRein').whereRein;
 const whereClosest = require('./whereRein').whereClosest;
 const whereClosestAll = require('./whereRein').whereClosestAll;
+const disableSeat = require('./inactiveSeats.js').disableSeat;
+const enableSeat = require('./inactiveSeats.js').enableSeat;
+const getDisabledSeats = require('./inactiveSeats').getDisabledSeats;
 // const dataStore = require('./dataStore');
 
 // TODO: Look into viewJS (.org ?????)
@@ -26,6 +29,9 @@ client.on('ready', () => {
 });
 
 const rolesWithPermissions = ['Bottom', 'Top', 'Swinger', 'Admin'];
+
+const commandMatches = (expected, message) =>
+  _.toLower(message.content).substring(0, expected.length) === _.toLower(expected);
 
 const checkMessage = (message) => {
   // console.log('message', message.guild.id);
@@ -58,6 +64,12 @@ const checkMessage = (message) => {
     whereClosestAll(message);
   } else if (_.toLower(message.content).substring(0, 13) === '!whereclosest') {
     whereClosest(message);
+  } else if (commandMatches('!disableseat', message)) {
+    disableSeat(message);
+  } else if (commandMatches('!enableseat', message)) {
+    enableSeat(message);
+  } else if (commandMatches('!disabledseats', message)) {
+    getDisabledSeats(message);
   }
   // }
 
@@ -71,21 +83,32 @@ const checkMessage = (message) => {
   if (_.toLower(message.content).substring(0, 9) === '!help') {
     message.reply(`
     Commands:
-      !addreins <troopCount> <seatOfPower>
-      !addreins* <username>;<troopCount>;<seatOfPower>;
-      !addsitter <troopCount> <seatOfPower>
-      !addsitter* <username>;<troopCount>;<seatOfPower>;
-      !getreins [<seatOfPower>] (optional)
-      !sumreins
-      !delreins <id>
-      !delreinsall <location>
-      !surrender <location>
-      !delsitter <location>
-      !whererein
-      !whereclosest <x>;<y>
-      !whereclosestall <x>;<y>
+
+    **Reins**
+    !addreins <troopCount> <seatOfPower>
+    !addreins* <username>;<troopCount>;<seatOfPower>;
+    !getreins [<seatOfPower>] (optional)
+    !sumreins
+    !delreins <id>
+    !delreinsall <location>
+
+    **Sitters**
+    !addsitter <troopCount> <seatOfPower>
+    !addsitter* <username>;<troopCount>;<seatOfPower>;
+    !delsitter <location>
+
+    **Seats**
+    !disabledseats
+    !disableseat <seat name>
+    !enableseat <seat name>
+    !surrender <location>
+    
+    **Other**
+    !whererein
+    !whereclosest <x>;<y>
+    !whereclosestall <x>;<y>
       
-      !contribute : To see info about contributing to the code
+    !contribute : To see info about contributing to the code
 
     For any bug reports or help ask ${process.env.username} or email ${process.env.supportEmail}
     `);

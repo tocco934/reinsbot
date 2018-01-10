@@ -5,6 +5,7 @@
   "private": "true",
   "main": "app.js",
   "dependencies": {
+    "bluebird": "^3.5.1",
     "discord.js": "^11.2.1",
     "lodash": "^4.17.4",
     "memory-cache": "^0.2.0",

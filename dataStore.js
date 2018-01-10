@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const { Client } = require('pg');
 const optional = require('optional');
+const Promise = require('bluebird');
 
 const settings = optional('./settings');
 
@@ -38,12 +39,38 @@ const createReinsTable = async (serverId) => {
 
     await client.query(createSyntax);
   } catch (err) {
-    console.error('Error creating db table', err);
+    console.error('Error creating reinsv1 table', err);
   } finally {
     if (client) {
       await client.end();
     }
   }
+};
+
+const createInactiveTable = async (serverId) => {
+  let client;
+  try {
+    client = await setupClient();
+
+    const createSyntax = `
+      CREATE TABLE IF NOT EXISTS seatstatusv1_${serverId} (
+        location varchar(100) PRIMARY KEY,
+        inactive bool default false NOT NULL,
+        timeAdded timestamp NOT NULL
+      );`;
+
+    await client.query(createSyntax);
+  } catch (err) {
+    console.error('Error creating seatstatusv1 table', err);
+  } finally {
+    if (client) {
+      await client.end();
+    }
+  }
+};
+
+const setupTables = async (serverId) => {
+  await Promise.all([createReinsTable(serverId), createInactiveTable(serverId)]);
 };
 
 const removeReins = async (id, serverId) => {
@@ -80,7 +107,7 @@ const getReinsByLocation = async (location, serverId) => {
   let res;
 
   try {
-    await createReinsTable(serverId);
+    await setupTables(serverId);
     client = await setupClient();
 
     const query = {
@@ -104,7 +131,7 @@ const getAllReins = async (serverId) => {
   let client;
   let res;
   try {
-    await createReinsTable(serverId);
+    await setupTables(serverId);
     client = await setupClient();
 
     res = await client.query(`SELECT * FROM reinsv1_${serverId} WHERE issitter = true OR timeAdded > NOW() - INTERVAL '24 hour'`);
@@ -123,7 +150,7 @@ const getAllReins = async (serverId) => {
 const addReins = async (reinInfo, serverId) => {
   let client;
   try {
-    await createReinsTable(serverId);
+    await setupTables(serverId);
     client = await setupClient();
 
     // TODO: move query to variable
@@ -142,7 +169,7 @@ const addReins = async (reinInfo, serverId) => {
 const addSitter = async (reinInfo, serverId) => {
   let client;
   try {
-    await createReinsTable(serverId);
+    await setupTables(serverId);
     client = await setupClient();
 
     // TODO: move query to variable
@@ -173,6 +200,81 @@ const removeSitter = async (location, serverId) => {
   }
 };
 
+const addInactiveSeat = async (serverId, seatName) => {
+  let client;
+  try {
+    client = await setupClient();
+
+    const values = [seatName];
+    const insertStatement = `INSERT INTO seatstatusv1_${serverId}(location, inactive, timeAdded) VALUES ($1, true, NOW())`;
+    await client.query(insertStatement, values);
+  } catch (err) {
+    console.error(`Error setting seat ${seatName} inactive`, err);
+  } finally {
+    if (client) {
+      await client.end();
+    }
+  }
+};
+
+const removeInactiveSeat = async (serverId, seatName) => {
+  let client;
+  try {
+    client = await setupClient();
+
+    await client.query(`DELETE FROM ONLY seatstatusv1_${serverId} WHERE location = $1`, [seatName]);
+  } catch (err) {
+    console.error(`Error deleting inactive seat ${seatName}`, err);
+  } finally {
+    if (client) {
+      await client.end();
+    }
+  }
+};
+
+const getInactiveSeats = async (serverId) => {
+  let client;
+  let res;
+  try {
+    await setupTables(serverId);
+    client = await setupClient();
+
+    res = await client.query(`SELECT * FROM seatstatusv1_${serverId} WHERE inactive = true`);
+  } catch (err) {
+    console.error('Error retrieving inactive seats', err);
+  } finally {
+    if (client) {
+      await client.end();
+    }
+  }
+  return res.rows;
+};
+
+const getInactiveSeat = async (serverId, seatName) => {
+  let client;
+  let res;
+
+  try {
+    await setupTables(serverId);
+    client = await setupClient();
+
+    const query = {
+      text: `SELECT * FROM seatstatusv1_${serverId} WHERE location = $1`,
+      values: [seatName],
+    };
+
+    res = await client.query(query);
+  } catch (err) {
+    console.error(`Error retrieving inactive seat ${seatName}`, err);
+  } finally {
+    if (client) {
+      await client.end();
+    }
+  }
+
+  return res.rows;
+};
+
 module.exports = {
   createReinsTable,
   getAllReins,
@@ -182,4 +284,8 @@ module.exports = {
   removeReins,
   removeSitter,
   deleteReinsFromLocation,
+  addInactiveSeat,
+  removeInactiveSeat,
+  getInactiveSeats,
+  getInactiveSeat,
 };
