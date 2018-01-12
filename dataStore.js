@@ -69,16 +69,32 @@ const createInactiveTable = async (serverId) => {
   }
 };
 
+<<<<<<< HEAD
 const cleanUp = async (serverId) => {
+=======
+const createTroopInfoTable = async (serverId) => {
+>>>>>>> Working on a lot of stuff, saving
   let client;
   try {
     client = await setupClient();
 
+<<<<<<< HEAD
     const cleanUpStatement = `DELETE FROM reinsv1_${serverId} WHERE issitter = false AND timeAdded < NOW() - INTERVAL '24 hour'`;
 
     await client.query(cleanUpStatement);
   } catch (err) {
     console.error('Error cleaning tables', err);
+=======
+    const createSyntax = `
+      CREATE TABLE IF NOT EXISTS troopinfov1_${serverId} (
+        username varchar(150) PRIMARY KEY,
+        troops int NOT NULL
+      );`;
+
+    await client.query(createSyntax);
+  } catch (err) {
+    console.error('Error creating troopinfov1 table', err);
+>>>>>>> Working on a lot of stuff, saving
   } finally {
     if (client) {
       await client.end();
@@ -87,7 +103,15 @@ const cleanUp = async (serverId) => {
 };
 
 const setupTables = async (serverId) => {
+<<<<<<< HEAD
   // await Promise.all([createReinsTable(serverId), createInactiveTable(serverId), cleanUp(serverId)]);
+=======
+  await Promise.all([
+    createReinsTable(serverId),
+    createInactiveTable(serverId),
+    createTroopInfoTable(serverId),
+  ]);
+>>>>>>> Working on a lot of stuff, saving
 };
 
 const removeReins = async (id, serverId) => {
@@ -172,7 +196,7 @@ const addReins = async (reinInfo, serverId) => {
 
     // TODO: move query to variable
     const values = [_.trim(_.toLower(reinInfo.location)), reinInfo.username,
-      reinInfo.nickname, reinInfo.count];
+    reinInfo.nickname, reinInfo.count];
     await client.query(`INSERT INTO reinsv1_${serverId}(location, username, nickname, count, timeAdded) VALUES($1, $2, $3, $4, NOW())`, values);
   } catch (err) {
     console.error('Error adding reins', err);
@@ -194,7 +218,7 @@ const addSitter = async (reinInfo, serverId) => {
 
     // TODO: move query to variable
     const values = [_.trim(_.toLower(reinInfo.location)), reinInfo.username,
-      reinInfo.nickname, reinInfo.count];
+    reinInfo.nickname, reinInfo.count];
     await client.query(`INSERT INTO reinsv1_${serverId}(location, username, nickname, count, timeAdded, isSitter) VALUES($1, $2, $3, $4, NOW(), true)`, values);
   } catch (err) {
     console.error('Error adding reins', err);
@@ -276,6 +300,7 @@ const getInactiveSeat = async (serverId, seatName) => {
 const addInactiveSeat = async (serverId, seatName) => {
   let client;
   try {
+    await setupTables(serverId);
     client = await setupClient();
 
     const inactiveSeat = await getInactiveSeat(serverId, seatName);
@@ -293,6 +318,7 @@ const addInactiveSeat = async (serverId, seatName) => {
   }
 };
 
+<<<<<<< HEAD
 const getAllSitters = async (message) => {
   let client;
   let response;
@@ -304,11 +330,27 @@ const getAllSitters = async (message) => {
     response = await client.query(select);
   } catch (err) {
     console.error('Error getting sitters', err);
+=======
+const addTroopInfo = async (serverId, username, troopCount) => {
+  let client;
+  try {
+    await setupTables(serverId);
+    client = await setupClient();
+
+    const insertStatement = '';
+    const values = [username, troopCount];
+
+    // TODO: insert or update
+    await client.query(insertStatement, values);
+  } catch (err) {
+    console.error(`Error saving troop info for ${username}`, err);
+>>>>>>> Working on a lot of stuff, saving
   } finally {
     if (client) {
       await client.end();
     }
   }
+<<<<<<< HEAD
 
   const msgToSend = _.map(response.rows, row => `${row.id} ${row.username} ${row.location}`);
   message.reply(msgToSend, { split: true });
@@ -324,13 +366,54 @@ const getAllTables = async (message) => {
     response = await client.query(query);
   } catch (err) {
     console.error('Error getting tables', err);
+=======
+};
+
+const getTroopInfo = async (serverId, username) => {
+  let client;
+  let res;
+
+  try {
+    await setupTables(serverId);
+    client = await setupClient();
+
+    const selectStatement = `SELECT * FROM troopinfov1_${serverId} WHERE username = $1`;
+    const values = [username];
+
+    res = await client.query(selectStatement, values);
+  } catch (err) {
+    console.error(`Error saving troop info for ${username}`, err);
+>>>>>>> Working on a lot of stuff, saving
   } finally {
     if (client) {
       await client.end();
     }
   }
+<<<<<<< HEAD
 
   message.reply(JSON.stringify(response.rows));
+=======
+  return res.rows;
+};
+
+const deleteTroopInfo = async (serverId, username) => {
+  let client;
+  try {
+    await setupTables(serverId);
+    client = await setupClient();
+
+    const query = `DELETE FROM troopinfov1_${serverId} WHERE username = $1`;
+    const values = [username];
+
+    await client.query(query, values);
+  } catch (err) {
+    console.error(`Error deleting troop info for ${username}`, err);
+  } finally {
+    if (client) {
+      await client.end();
+    }
+  }
+>>>>>>> Working on a lot of stuff, saving
 };
 
 module.exports = {
@@ -346,6 +429,12 @@ module.exports = {
   removeInactiveSeat,
   getInactiveSeats,
   getInactiveSeat,
+<<<<<<< HEAD
   getAllSitters,
   getAllTables,
+=======
+  getTroopInfo,
+  addTroopInfo,
+  deleteTroopInfo,
+>>>>>>> Working on a lot of stuff, saving
 };

@@ -22,6 +22,10 @@ const getAllSitters = require('./dataStore').getAllSitters;
 const getAllTables = require('./dataStore').getAllTables;
 const saveSitterInfo = require('./sitterInfo').saveInfo;
 const getSitterInfo = require('./sitterInfo').getInfo;
+const saveTroopInfo = require('./troopInfo').saveInfo;
+const getTroopInfo = require('./troopInfo').getInfo;
+const deleteTroopInfo = require('./troopInfo').deleteInfo;
+const setSitter = require('./addReins').setSitter;
 // const dataStore = require('./dataStore');
 
 // TODO: Look into viewJS (.org ?????)
@@ -80,6 +84,14 @@ const checkMessage = (message) => {
     saveSitterInfo(message);
   } else if (commandMatches('!sitterinfo')) {
     getSitterInfo(message);
+  } else if (commandMatches('!addtroopinfo')) {
+    saveTroopInfo(message);
+  } else if (commandMatches('!gettroopinfo')) {
+    getTroopInfo(message);
+  } else if (commandMatches('!deltroopinfo')) {
+    deleteTroopInfo(message);
+  } else if (commandMatches('!setsitter')) {
+    setSitter(message);
   }
 
   // }
@@ -109,12 +121,14 @@ const checkMessage = (message) => {
     !addsitter <troopCount> <seatOfPower>
     !addsitter* <username>;<troopCount>;<seatOfPower>;
     !addsitterinfo <troopCount> <username>
+    !setsitter <username>;<location>
     !getsitterinfo <username>
     !delsitter <location>
 
     **Players**
     !addtroopinfo <troopCount> <username>
     !gettroopinfo <username>
+    !deltroopinfo <username>
 
     **Seats**
     !disabledseats

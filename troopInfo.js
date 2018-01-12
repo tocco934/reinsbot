@@ -11,13 +11,13 @@ const saveInfo = (message) => {
 
   const troopCount = arguments[0];
   if (!_.isNumber(troopCount)) {
-    return message.reply('!addtroopinfo <troopCount> <username>');
+    return message.reply('Usage: !addtroopinfo <troopCount> <username>');
   }
 
   // TODO: combine remaining contents of array
   const username = 'something';
   if (_.isEmpty(username)) {
-    return message.reply('!addtroopinfo <troopCount> <username>');
+    return message.reply('Usage: !addtroopinfo <troopCount> <username>');
   }
 
   try {
@@ -37,7 +37,7 @@ const getInfo = (message) => {
     .value();
 
   if (_.isEmpty(username)) {
-    return message.reply('!gettroopinfo <username>');
+    return message.reply('Usage: !gettroopinfo <username>');
   }
 
   const troopInfo = await dataStore.getTroopInfo(message.guild.id, username, troopCount);
@@ -51,7 +51,23 @@ const getInfo = (message) => {
   return message.reply(messageToReturn);
 };
 
+const deleteInfo = (message) => {
+  const username = _.chain(message.content)
+  .replace(/^!gettroopinfo/gi, '')
+  .trim()
+  .value();
+
+  if (_.isEmpty(username)) {
+    return message.reply('Missing username. Usage: !deltroopinfo <username>');
+  }
+
+  await dataStore.deleteTroopInfo(message.guild.id, username);
+
+  return message.reply(`Troop info for ${username} deleted`);
+};
+
 module.exports = {
   saveInfo,
   getInfo,
+  deleteInfo,
 };

@@ -128,11 +128,42 @@ const addReinsForOther = async (message) => {
   return message.reply('Reins Added');
 };
 
+const setSitter = async (message) => {
+  const [username, location] = _.chain(message.content)
+    .replace(/^!setsitter/gi, '')
+    .trim()
+    .split(';')
+    .value();
+
+  if (_.isEmpty(username) || _.isEmpty(location)) {
+    return message.reply('Usage: !setsitter <username>;<location>');
+  }
+
+  const locationName = _.get(seatsOfPower.getSeatOfPowerDetails(location), 'name', location);
+
+  const sitterInfo = await dataStore.getTroopInfo(message.guild.id, username);
+
+  if (_.isEmpty(sitterInfo)) {
+    return message.reply(`Troop info not set for ${username}. Please set that up first before using this command.`);
+  }
+
+  const info = {
+    location: locationName,
+    username,
+    count: sitterInfo.troops,
+  };
+
+  await dataStore.addSitter(info, message.guild.id);
+
+  return message.reply(`${username} added to ${location}`);
+};
+
 module.exports = {
   addReins,
   addReinsForOther,
   addSitter,
   addSitterForOther,
+  setSitter,
   parseMessage,
   validateCommand,
 };
