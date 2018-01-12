@@ -20,6 +20,8 @@ const enableSeat = require('./inactiveSeats.js').enableSeat;
 const getDisabledSeats = require('./inactiveSeats').getDisabledSeats;
 const getAllSitters = require('./dataStore').getAllSitters;
 const getAllTables = require('./dataStore').getAllTables;
+const saveSitterInfo = require('./sitterInfo').saveInfo;
+const getSitterInfo = require('./sitterInfo').getInfo;
 // const dataStore = require('./dataStore');
 
 // TODO: Look into viewJS (.org ?????)
@@ -74,6 +76,10 @@ const checkMessage = (message) => {
     getDisabledSeats(message);
   } else if (commandMatches('!getsitters', message)) {
     getAllSitters(message);
+  } else if (commandMatches('!addsitterinfo')) {
+    saveSitterInfo(message);
+  } else if (commandMatches('!sitterinfo')) {
+    getSitterInfo(message);
   }
 
   // }
@@ -84,7 +90,9 @@ const checkMessage = (message) => {
   //   message.reply('HELLO BOOM FACE');
   // }
 
-  // TODO: make the vars below into environment variables
+  // TODO: Add more descriptions to these!
+
+  // Or add a !help+ command!
   if (_.toLower(message.content).substring(0, 9) === '!help') {
     message.reply(`
     Commands:
@@ -100,7 +108,13 @@ const checkMessage = (message) => {
     **Sitters**
     !addsitter <troopCount> <seatOfPower>
     !addsitter* <username>;<troopCount>;<seatOfPower>;
+    !addsitterinfo <troopCount> <username>
+    !getsitterinfo <username>
     !delsitter <location>
+
+    **Players**
+    !addtroopinfo <troopCount> <username>
+    !gettroopinfo <username>
 
     **Seats**
     !disabledseats
