@@ -133,7 +133,9 @@ const checkMessage = (message) => {
 
 client.on('message', message => checkMessage(message));
 
-// dataStore.createReinsTable();
+client.on('ready', () => {
+  client.user.setGame('use !help');
+});
 
 client.login(process.env.discordToken || settings.discordToken);
 
