@@ -2,6 +2,7 @@ const _ = require('lodash');
 const Promise = require('bluebird');
 const dataStore = require('./dataStore');
 const seatsOfPower = require('./seatsOfPowerHelper');
+const messageHelper = require('./messagePaging').sendMessage;
 
 const parseLocation = (contents) => {
   const commandRemoved = _.trim(_.replace(contents, /^!getreins/gi, ''));
@@ -131,7 +132,8 @@ const getReins = async (message) => {
       reply = await getReinsForLocation(location, message.guild.id);
     }
 
-    message.reply(reply);
+    return messageHelper(message, reply);
+    // message.reply(reply);
   } catch (e) {
     console.error(e);
     message.reply('GetReins Usage: !getreins [<seat of power>]');
