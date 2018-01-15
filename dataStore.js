@@ -69,8 +69,25 @@ const createInactiveTable = async (serverId) => {
   }
 };
 
+const cleanUp = async (serverId) => {
+  let client;
+  try {
+    client = await setupClient();
+
+    const cleanUpStatement = `DELETE FROM reinsv1_${serverId} WHERE issitter = false AND timeAdded < NOW() - INTERVAL '24 hour'`;
+
+    await client.query(cleanUpStatement);
+  } catch (err) {
+    console.error('Error cleaning tables', err);
+  } finally {
+    if (client) {
+      await client.end();
+    }
+  }
+};
+
 const setupTables = async (serverId) => {
-  await Promise.all([createReinsTable(serverId), createInactiveTable(serverId)]);
+  await Promise.all([createReinsTable(serverId), createInactiveTable(serverId), cleanUp(serverId)]);
 };
 
 const removeReins = async (id, serverId) => {
@@ -274,6 +291,26 @@ const addInactiveSeat = async (serverId, seatName) => {
   }
 };
 
+const getAllSitters = async (message) => {
+  let client;
+  let response;
+  const serverId = message.guild.id;
+  try {
+    client = await setupClient();
+
+    const select = `SELECT * FROM reinsv1_${serverId} WHERE issitter = true ORDER BY location`;
+    response = await client.query(select);
+  } catch (err) {
+    console.error('Error getting sitters', err);
+  } finally {
+    if (client) {
+      await client.end();
+    }
+  }
+
+  message.reply(JSON.stringify(response.rows));
+};
+
 module.exports = {
   createReinsTable,
   getAllReins,
@@ -287,4 +324,5 @@ module.exports = {
   removeInactiveSeat,
   getInactiveSeats,
   getInactiveSeat,
+  getAllSitters,
 };

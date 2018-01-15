@@ -18,6 +18,7 @@ const whereClosestAll = require('./whereRein').whereClosestAll;
 const disableSeat = require('./inactiveSeats.js').disableSeat;
 const enableSeat = require('./inactiveSeats.js').enableSeat;
 const getDisabledSeats = require('./inactiveSeats').getDisabledSeats;
+const getAllSitters = require('./dataStore').getAllSitters;
 // const dataStore = require('./dataStore');
 
 // TODO: Look into viewJS (.org ?????)
@@ -70,6 +71,8 @@ const checkMessage = (message) => {
     enableSeat(message);
   } else if (commandMatches('!disabledseats', message)) {
     getDisabledSeats(message);
+  } else if (commandMatches('!getsitters', message)) {
+    getAllSitters(message);
   }
 
   console.log('Server Id', message.guild.id);
