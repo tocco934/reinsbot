@@ -75,7 +75,6 @@ const checkMessage = (message) => {
     getAllSitters(message);
   }
 
-  console.log('Server Id', message.guild.id);
   // }
 
   // if (_.toLower(message.content).substring(0, 5) === '!test') {
