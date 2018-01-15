@@ -71,6 +71,8 @@ const checkMessage = (message) => {
   } else if (commandMatches('!disabledseats', message)) {
     getDisabledSeats(message);
   }
+
+  console.log('Server Id', message.guild.id);
   // }
 
   // if (_.toLower(message.content).substring(0, 5) === '!test') {
