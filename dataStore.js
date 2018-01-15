@@ -134,6 +134,7 @@ const getAllReins = async (serverId) => {
     await setupTables(serverId);
     client = await setupClient();
 
+    console.log('table name', `reinsv1_${serverId}`);
     res = await client.query(`SELECT * FROM reinsv1_${serverId} WHERE issitter = true OR timeAdded > NOW() - INTERVAL '24 hour'`);
   } catch (err) {
     console.error('Error retrieving reins', err);
