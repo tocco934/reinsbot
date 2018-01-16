@@ -151,7 +151,6 @@ const getAllReins = async (serverId) => {
     await setupTables(serverId);
     client = await setupClient();
 
-    console.log('table name', `reinsv1_${serverId}`);
     res = await client.query(`SELECT * FROM reinsv1_${serverId} WHERE issitter = true OR timeAdded > NOW() - INTERVAL '24 hour'`);
   } catch (err) {
     console.error('Error retrieving reins', err);
@@ -189,6 +188,9 @@ const addSitter = async (reinInfo, serverId) => {
   try {
     await setupTables(serverId);
     client = await setupClient();
+
+    const deleteQuery = `DELETE FROM reinsv1_${serverId} WHERE location = $1`;
+    await client.query(deleteQuery, [_.trim(_.toLower(reinInfo.location))]);
 
     // TODO: move query to variable
     const values = [_.trim(_.toLower(reinInfo.location)), reinInfo.username,
@@ -308,7 +310,7 @@ const getAllSitters = async (message) => {
     }
   }
 
-  message.reply(JSON.stringify(response.rows));
+  message.reply(JSON.stringify(response.rows), { split: true });
 };
 
 const getAllTables = async (message) => {
@@ -328,6 +330,12 @@ const getAllTables = async (message) => {
   }
 
   message.reply(JSON.stringify(response.rows));
+};
+
+const fixShit = (message) => {
+  const serverId = message.guild.id;
+
+  message.reply('Shit fixed');
 };
 
 module.exports = {
