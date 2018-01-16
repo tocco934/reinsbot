@@ -310,7 +310,8 @@ const getAllSitters = async (message) => {
     }
   }
 
-  message.reply(JSON.stringify(response.rows), { split: true });
+  const msgToSend = _.map(response.rows, row => `${row.id} ${row.username} ${row.location}`);
+  message.reply(msgToSend, { split: true });
 };
 
 const getAllTables = async (message) => {
@@ -330,12 +331,6 @@ const getAllTables = async (message) => {
   }
 
   message.reply(JSON.stringify(response.rows));
-};
-
-const fixShit = (message) => {
-  const serverId = message.guild.id;
-
-  message.reply('Shit fixed');
 };
 
 module.exports = {
