@@ -87,7 +87,7 @@ const cleanUp = async (serverId) => {
 };
 
 const setupTables = async (serverId) => {
-  await Promise.all([createReinsTable(serverId), createInactiveTable(serverId), cleanUp(serverId)]);
+  // await Promise.all([createReinsTable(serverId), createInactiveTable(serverId), cleanUp(serverId)]);
 };
 
 const removeReins = async (id, serverId) => {
@@ -311,6 +311,25 @@ const getAllSitters = async (message) => {
   message.reply(JSON.stringify(response.rows));
 };
 
+const getAllTables = async (message) => {
+  let client;
+  let response;
+  try {
+    client = await setupClient();
+
+    const query = "SELECT table_name FROM information_schema.tables WHERE table_schema='public'";
+    response = await client.query(query);
+  } catch (err) {
+    console.error('Error getting tables', err);
+  } finally {
+    if (client) {
+      await client.end();
+    }
+  }
+
+  message.reply(JSON.stringify(response.rows));
+};
+
 module.exports = {
   createReinsTable,
   getAllReins,
@@ -325,4 +344,5 @@ module.exports = {
   getInactiveSeats,
   getInactiveSeat,
   getAllSitters,
+  getAllTables,
 };

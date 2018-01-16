@@ -19,6 +19,7 @@ const disableSeat = require('./inactiveSeats.js').disableSeat;
 const enableSeat = require('./inactiveSeats.js').enableSeat;
 const getDisabledSeats = require('./inactiveSeats').getDisabledSeats;
 const getAllSitters = require('./dataStore').getAllSitters;
+const getAllTables = require('./dataStore').getAllTables;
 // const dataStore = require('./dataStore');
 
 // TODO: Look into viewJS (.org ?????)
