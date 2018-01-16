@@ -20,6 +20,7 @@ const enableSeat = require('./inactiveSeats.js').enableSeat;
 const getDisabledSeats = require('./inactiveSeats').getDisabledSeats;
 const getAllSitters = require('./dataStore').getAllSitters;
 const getAllTables = require('./dataStore').getAllTables;
+const sendMessage = require('./testing').sendMessage;
 // const dataStore = require('./dataStore');
 
 // TODO: Look into viewJS (.org ?????)
@@ -74,6 +75,8 @@ const checkMessage = (message) => {
     getDisabledSeats(message);
   } else if (commandMatches('!getsitters', message)) {
     getAllSitters(message);
+  } else if (commandMatches('!test', message)) {
+    sendMessage(message);
   }
 
   // }
