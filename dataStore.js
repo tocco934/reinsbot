@@ -87,7 +87,7 @@ const cleanUp = async (serverId) => {
 };
 
 const setupTables = async (serverId) => {
-  await Promise.all([createReinsTable(serverId), createInactiveTable(serverId), cleanUp(serverId)]);
+  // await Promise.all([createReinsTable(serverId), createInactiveTable(serverId), cleanUp(serverId)]);
 };
 
 const removeReins = async (id, serverId) => {
