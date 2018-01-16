@@ -5,6 +5,14 @@ module.exports = {
     coords: { x: 735, y: 994 },
     region: 'The Riverlands',
   },
+  amberly: {
+    name: 'amberly',
+    coords: {
+      x: 1011,
+      y: 661,
+    },
+    region: 'The Stormlands',
+  },
   ashemark: {
     name: 'ashemark',
     coords: { x: 494, y: 1005 },
@@ -45,6 +53,14 @@ module.exports = {
     coords: { x: 290, y: 233 },
     region: 'The Reach',
   },
+  blackhaven: {
+    name: 'blackhaven',
+    coords: {
+      x: 908,
+      y: 457,
+    },
+    region: 'The Stormlands',
+  },
   blackmont: {
     name: 'blackmont',
     coords: { x: 600, y: 262 },
@@ -61,6 +77,14 @@ module.exports = {
     region: 'The Riverlands',
   },
   'brightwater keep': { name: 'brightwater keep', coords: { x: 385, y: 363 } },
+  bronzegate: {
+    name: 'bronzegate',
+    coords: {
+      x: 1114,
+      y: 653,
+    },
+    region: 'The Stormlands',
+  },
   bronzehearth: { name: 'bronzehearth', coords: { x: 403, y: 1623 } },
   brownhollow: { name: 'brownhollow', coords: { x: 1245, y: 909 } },
   'casterly rock': { name: 'casterly rock', coords: { x: 367, y: 864 } },
@@ -71,6 +95,14 @@ module.exports = {
   coldmoat: { name: 'coldmoat', coords: { x: 612, y: 640 } },
   'coldwater burn': { name: 'coldwater burn', coords: { x: 1176, y: 1354 } },
   crakehall: { name: 'crakehall', coords: { x: 312, y: 714 } },
+  crowsnest: {
+    name: 'crows nest',
+    coords: {
+      x: 1073,
+      y: 448,
+    },
+    region: 'The Stormlands',
+  },
   'deep den': { name: 'deep den', coords: { x: 541, y: 858 } },
   'deepwood motte': { name: 'deepwood motte', coords: { x: 580, y: 2000 } },
   dragonstone: { name: 'dragonstone', coords: { x: 1247, y: 876 } },
@@ -78,8 +110,24 @@ module.exports = {
   'dun fort': { name: 'dun fort', coords: { x: 1106, y: 853 } },
   'dyre den': { name: 'dyre den', coords: { x: 1192, y: 940 } },
   erenford: { name: 'erenford', coords: { x: 762, y: 1180 } },
+  evenfallhall: {
+    name: 'evenfall hall',
+    coords: {
+      x: 1281,
+      y: 520,
+    },
+    region: 'The Stormlands',
+  },
   faircastle: { name: 'faircastle', coords: { x: 356, y: 968 } },
   feastfires: { name: 'feastfires', coords: { x: 283, y: 853 } },
+  felwood: {
+    name: 'felwood',
+    coords: {
+      x: 1114,
+      y: 578,
+    },
+    region: 'The Stormlands',
+  },
   'flints finger': { name: 'flints finger', coords: { x: 436, y: 1495 } },
   'gates of the moon': { name: 'gates of the moon', coords: { x: 1105, y: 1055 } },
   'ghost hill': { name: 'ghost hill', coords: { x: 1214, y: 150 } },
@@ -89,8 +137,40 @@ module.exports = {
   goldgrass: { name: 'goldgrass', coords: { x: 618, y: 1684 } },
   'grassfield keep': { name: 'grassfield keep', coords: { x: 831, y: 575 } },
   'grassy vale': { name: 'grassy vale', coords: { x: 884, y: 576 } },
+  greenstone: {
+    name: 'greenstone',
+    coords: {
+      x: 1268,
+      y: 356,
+    },
+    region: 'The Stormlands',
+  },
   'greywater watch': { name: 'greywater watch', coords: { x: 803, y: 1457 } },
+  griffinsroost: {
+    name: 'griffins roost',
+    coords: {
+      x: 1127,
+      y: 485,
+    },
+    region: 'The Stormlands',
+  },
   harrenhal: { name: 'harrenhal', coords: { x: 891, y: 965 } },
+  harvesthall: {
+    name: 'harvest hall',
+    coords: {
+      x: 841,
+      y: 441,
+    },
+    region: 'The Stormlands',
+  },
+  haystackhall: {
+    name: 'haystack hall',
+    coords: {
+      x: 1177,
+      y: 610,
+    },
+    region: 'The Stormlands',
+  },
   'hearts home': { name: 'hearts home', coords: { x: 1117, y: 1236 } },
   hellholt: { name: 'hellholt', coords: { x: 770, y: 129 } },
   'high hermitage': { name: 'high hermitage', coords: { x: 582, y: 204 } },
@@ -110,14 +190,46 @@ module.exports = {
   lemonwood: { name: 'lemonwood', coords: { x: 1203, y: 62 } },
   'long table': { name: 'long table', coords: { x: 697, y: 551 } },
   'longbow hall': { name: 'longbow hall', coords: { x: 1239, y: 1237 } },
+  mistwood: {
+    name: 'mistwood',
+    coords: {
+      x: 1158,
+      y: 389,
+    },
+    region: 'The Stormlands',
+  },
   'moat cailin': { name: 'moat cailin', coords: { x: 819, y: 1560 } },
+  nightsong: {
+    name: 'nightsong',
+    coords: {
+      x: 684,
+      y: 395,
+    },
+    region: 'The Stormlands',
+  },
   'old anchor': { name: 'old anchor', coords: { x: 1266, y: 1158 } },
   'old oak': { name: 'old oak', coords: { x: 342, y: 583 } },
   oldcastle: { name: 'oldcastle', coords: { x: 982, y: 1507 } },
   oldtown: { name: 'oldtown', coords: { x: 362, y: 280 } },
   pinkmaiden: { name: 'pinkmaiden', coords: { x: 669, y: 960 } },
-  'raventree hall': { name: 'raventree hall', coords: { x: 719, y: 1114 } },
+  poddingfield: {
+    name: 'poddingfield',
+    coords: {
+      x: 930,
+      y: 550,
+    },
+    region: 'The Stormlands',
+  },
+  rainhouse: {
+    name: 'rain house',
+    coords: {
+      x: 1279,
+      y: 445,
+    },
+    region: 'The Stormlands',
+  },
   ramsgate: { name: 'ramsgate', coords: { x: 1141, y: 1654 } },
+  'raventree hall': { name: 'raventree hall', coords: { x: 719, y: 1114 } },
   'red Lake': { name: 'red Lake', coords: { x: 436, y: 654 } },
   'rillwater crossing': { name: 'rillwater crossing', coords: { x: 367, y: 1713 } },
   riverrun: { name: 'riverrun', coords: { x: 700, y: 1046 } },
@@ -136,9 +248,33 @@ module.exports = {
   'sows horn': { name: 'sows horn', coords: { x: 976, y: 855 } },
   spearhead: { name: 'spearhead', coords: { x: 964, y: 1278 } },
   starfall: { name: 'starfall', coords: { x: 552, y: 172 } },
+  steadfastpavilion: {
+    name: 'steadfastpavilion',
+    coords: {
+      x: 1112,
+      y: 690,
+    },
+    region: 'The Stormlands',
+  },
   stokeworth: { name: 'stokeworth', coords: { x: 1022, y: 845 } },
   'stone hedge': { name: 'stone hedge', coords: { x: 819, y: 1032 } },
   stonedance: { name: 'stonedance', coords: { x: 1247, y: 749 } },
+  stonehelm: {
+    name: 'stonehelm',
+    coords: {
+      x: 1029,
+      y: 393,
+    },
+    region: 'The Stormlands',
+  },
+  stormsend: {
+    name: 'Storms End',
+    coords: {
+      x: 1173,
+      y: 514,
+    },
+    region: 'The Stormlands',
+  },
   strongsong: { name: 'strongsong', coords: { x: 1001, y: 1199 } },
   'sun house': { name: 'sun house', coords: { x: 409, y: 102 } },
   sunspear: { name: 'sunspear', coords: { x: 1253, y: 90 } },

@@ -8,6 +8,8 @@ const getSeatOfPowerDetails = (seatName) => {
     case 'acorn_hall':
     case 'acorn-hall':
       return seatsOfPower['acorn hall'];
+    case 'amberly':
+      return seatsOfPower.amberly;
     case 'ashemark':
       return seatsOfPower.ashemark;
     case 'ashford castle':
@@ -36,6 +38,8 @@ const getSeatOfPowerDetails = (seatName) => {
       return seatsOfPower.bitterbridge;
     case 'blackcrown':
       return seatsOfPower.blackcrown;
+    case 'blackhaven':
+      return seatsOfPower.blackhaven;
     case 'blackmont':
       return seatsOfPower.blackmont;
     case 'bloody gate':
@@ -50,6 +54,8 @@ const getSeatOfPowerDetails = (seatName) => {
     case 'brightwater_keep':
     case 'brightwater-keep':
       return seatsOfPower['brightwater keep'];
+    case 'bronzegate':
+      return seatsOfPower.bronzegate;
     case 'bronzehearth':
       return seatsOfPower.bronzehearth;
     case 'brownhollow':
@@ -92,6 +98,15 @@ const getSeatOfPowerDetails = (seatName) => {
       return seatsOfPower['coldwater burn'];
     case 'crakehall':
       return seatsOfPower.crakehall;
+    case 'crowsnest':
+    case 'crows nest':
+    case 'crows-nest':
+    case 'crows_nest':
+    case 'crow\'snest':
+    case 'crow\'s nest':
+    case 'crow\'s-nest':
+    case 'crow\'s_nest':
+      return seatsOfPower.crowsnest;
     case 'deep den':
     case 'deepden':
     case 'deep_den':
@@ -118,10 +133,17 @@ const getSeatOfPowerDetails = (seatName) => {
       return seatsOfPower['dyre den'];
     case 'erenford':
       return seatsOfPower.erenford;
+    case 'evenfall hall':
+    case 'evenfallhall':
+    case 'evenfall-hall':
+    case 'evenfall_hall':
+      return seatsOfPower.evenfallhall;
     case 'faircastle':
       return seatsOfPower.faircastle;
     case 'feastfires':
       return seatsOfPower.feastfires;
+    case 'felwood':
+      return seatsOfPower.felwood;
     case 'flints finger':
     case 'fintsfinger':
     case 'flints_finger':
@@ -162,6 +184,8 @@ const getSeatOfPowerDetails = (seatName) => {
     case 'grassy_vale':
     case 'grassy-vale':
       return seatsOfPower['grassy vale'];
+    case 'greenstone':
+      return seatsOfPower.greenstone;
     case 'greywater watch':
     case 'greywaterwatch':
     case 'greywater_watch':
@@ -171,8 +195,27 @@ const getSeatOfPowerDetails = (seatName) => {
     case 'graywater_watch':
     case 'graywater-watch':
       return seatsOfPower['greywater watch'];
+    case 'griffinsroost':
+    case 'griffins roost':
+    case 'griffins_roost':
+    case 'griffins-roost':
+    case 'griffin\'sroost':
+    case 'griffin\'s roost':
+    case 'griffin\'s_roost':
+    case 'griffin\'s-roost':
+      return seatsOfPower.griffinsroost;
     case 'harrenhal':
       return seatsOfPower.harrenhal;
+    case 'harvesthall':
+    case 'harvest hall':
+    case 'harvest-hall':
+    case 'harvest_hall':
+      return seatsOfPower.harvesthall;
+    case 'haystackhall':
+    case 'haystack hall':
+    case 'haystack_hall':
+    case 'haystack-hall':
+      return seatsOfPower.haystackhall;
     case 'heartshome':
     case 'hearts home':
     case 'heart\'s home':
@@ -247,11 +290,15 @@ const getSeatOfPowerDetails = (seatName) => {
     case 'longbow_hall':
     case 'longbow-hall':
       return seatsOfPower['longbow hall'];
+    case 'mistwood':
+      return seatsOfPower.mistwood;
     case 'moat cailin':
     case 'moatcailin':
     case 'moat_cailin':
     case 'moat-cailin':
       return seatsOfPower['moat cailin'];
+    case 'nightsong':
+      return seatsOfPower.nightsong;
     case 'old anchor':
     case 'oldanchor':
     case 'old_anchor':
@@ -268,13 +315,20 @@ const getSeatOfPowerDetails = (seatName) => {
       return seatsOfPower.oldtown;
     case 'pinkmaiden':
       return seatsOfPower.pinkmaiden;
+    case 'poddingfield':
+      return seatsOfPower.poddingfield;
+    case 'rain house':
+    case 'rainhouse':
+    case 'rain_house':
+    case 'rain-house':
+      return seatsOfPower.rainhouse;
+    case 'ramsgate':
+      return seatsOfPower.ramsgate;
     case 'raventree hall':
     case 'raventreehall':
     case 'raventree_hall':
     case 'raventree-hall':
       return seatsOfPower['raventree hall'];
-    case 'ramsgate':
-      return seatsOfPower.ramsgate;
     case 'red Lake':
     case 'red_lake':
     case 'red-lake':
@@ -337,6 +391,11 @@ const getSeatOfPowerDetails = (seatName) => {
       return seatsOfPower.spearhead;
     case 'starfall':
       return seatsOfPower.starfall;
+    case 'steadfastpavilion':
+    case 'steadfast pavilion':
+    case 'steadfast_pavilion':
+    case 'steadfast-pavilion':
+      return seatsOfPower.steadfastpavilion;
     case 'stokeworth':
       return seatsOfPower.stokeworth;
     case 'stone hedge':
@@ -344,6 +403,17 @@ const getSeatOfPowerDetails = (seatName) => {
     case 'stone_hedge':
     case 'stone-hedge':
       return seatsOfPower['stone hedge'];
+    case 'stonehelm':
+      return seatsOfPower.stonehelm;
+    case 'stormsend':
+    case 'storms end':
+    case 'storms-end':
+    case 'storms_end':
+    case 'storm\'s end':
+    case 'storm\'send':
+    case 'storm\'s-end':
+    case 'storm\'s_end':
+      return seatsOfPower.stormsend;
     case 'stonedance':
       return seatsOfPower.stonedance;
     case 'strongsong':
