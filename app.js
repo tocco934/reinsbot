@@ -74,8 +74,6 @@ const checkMessage = (message) => {
     getDisabledSeats(message);
   } else if (commandMatches('!getsitters', message)) {
     getAllSitters(message);
-  } else if (commandMatches('!getAllTables', message)) {
-    getAllTables(message);
   }
 
   // }
