@@ -189,7 +189,7 @@ const addSitter = async (reinInfo, serverId) => {
     await setupTables(serverId);
     client = await setupClient();
 
-    const deleteQuery = `DELETE FROM reinsv1_${serverId} WHERE location = $1`;
+    const deleteQuery = `DELETE FROM reinsv1_${serverId} WHERE location = $1 AND isSitter = true`;
     await client.query(deleteQuery, [_.trim(_.toLower(reinInfo.location))]);
 
     // TODO: move query to variable
