@@ -18,7 +18,7 @@ const getCurrentSitter = reinforcements =>
     .sort('timeAdded')
     .last();
 
-const formatReinforcer = reinforcer => `[${reinforcer.id}] ${reinforcer.username} (${reinforcer.nickname}) ${reinforcer.count}`;
+const formatReinforcer = reinforcer => `[${reinforcer.id}] ${reinforcer.username} (${reinforcer.nickname}) ${reinforcer.count.toLocaleString()}`;
 
 const formatLocationName = (name) => {
   const splitUpName = _.split(name, ' ');
@@ -62,7 +62,7 @@ const getReinsForLocation = async (location, serverId) => {
   const formattedReinforcers = formatReinforcements(entriesForLocation);
   return `\n
   Seat of Power: ${formattedLocation} ${_.isEmpty(inactiveSeat) ? '' : '- **INACTIVE**'}
-  Total Reinforcements: ${totalReinforcements}${totalReinforcements >= 1200000 ? ' Cos Fuck Dedo' : ''}\n
+  Total Reinforcements: ${totalReinforcements.toLocaleString()}${totalReinforcements >= 1200000 ? ' Cos Fuck Dedo' : ''}\n
   Reinforcements: ${formattedReinforcers}`;
 };
 
@@ -88,7 +88,7 @@ const getSimplifiedReins = async (message) => {
     return `\n
 Seat of Power: ${formattedLocation} ${_.isEmpty(inactiveSeat) ? '' : '- **INACTIVE**'}
 Sitter: ${formattedSitter}
-Total Reinforcements: ${totalReinforcements}`;
+Total Reinforcements: ${totalReinforcements.toLocaleString()}`;
   }));
 
   message.reply(_.join(messagesToSend, '\n\n ========='));
@@ -113,7 +113,7 @@ const getReinsForAll = async (serverId) => {
 
     return `\n
 Seat of Power: **${formattedLocation}** ${_.isEmpty(inactiveSeat) ? '' : '- **INACTIVE**'}
-Total Reinforcements: ${totalReinforcements}
+Total Reinforcements: ${totalReinforcements.toLocaleString()}
 Reinforcements: ${formattedReinforcers}`;
   }));
 
