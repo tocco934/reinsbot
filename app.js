@@ -35,9 +35,12 @@ const rolesWithPermissions = ['Bottom', 'Top', 'Swinger', 'Admin'];
 const commandMatches = (expected, message) =>
   _.toLower(message.content).substring(0, expected.length) === _.toLower(expected);
 
+  const allowedChannelsForGetCommands = ['reins', 'losers'];
+
 const checkMessage = (message) => {
   // console.log('message', message.guild.id);
   // if (_.includes(rolesWithPermissions, message.member.highestRole)) {
+  console.log('message', message.channel);
   if (_.toLower(message.content).substring(0, 10) === '!addreins*') {
     addReinsForOther(message);
   } else if (_.toLower(message.content).substring(0, 9) === '!addreins') {
@@ -47,11 +50,23 @@ const checkMessage = (message) => {
   } else if (_.toLower(message.content).substring(0, 10) === '!addsitter') {
     addSitter(message);
   } else if (_.toLower(message.content).substring(0, 9) === '!getreins') {
-    getReins(message);
+    if (_.includes(allowedChannelsForGetCommands, message.channel.name)) {
+      getReins(message);
+    } else {
+      message.reply('This channel does not have permissions to use this command.')
+    }
   } else if (_.toLower(message.content).substring(0, 9) === '!sumreins') {
-    getSimplifiedReins(message);
+    if (_.includes(allowedChannelsForGetCommands, message.channel.name)) {
+      getSimplifiedReins(message);
+    } else {
+      message.reply('This channel does not have permissions to use this command.')
+    }
   } else if (_.toLower(message.content).substring(0, 12) === '!delreinsall') {
-    deleteReinsFromLocation(message);
+    if (_.includes(allowedChannelsForGetCommands, message.channel.name)) {
+      deleteReinsFromLocation(message);
+    } else {
+      message.reply('This channel does not have permissions to use this command.')
+    }
   } else if (_.toLower(message.content).substring(0, 9) === '!delreins') {
     deleteReins(message);
   } else if (_.toLower(message.content).substring(0, 10) === '!delsitter') {
@@ -59,7 +74,11 @@ const checkMessage = (message) => {
   } else if (_.toLower(message.content).substring(0, 10) === '!whererein') {
     whereRein(message);
   } else if (_.toLower(message.content).substring(0, 10) === '!surrender') {
-    deleteReinsFromLocation(message);
+    if (_.includes(allowedChannelsForGetCommands, message.channel.name)) {
+      deleteReinsFromLocation(message);
+    } else {
+      message.reply('This channel does not have permissions to use this command.')
+    }
   } else if (_.toLower(message.content).substring(0, 8) === '!fixshit') {
     message.reply('Nothing To Fix!');
   } else if (_.toLower(message.content).substring(0, 16) === '!whereclosestall') {
@@ -73,7 +92,11 @@ const checkMessage = (message) => {
   } else if (commandMatches('!disabledseats', message)) {
     getDisabledSeats(message);
   } else if (commandMatches('!getsitters', message)) {
-    getAllSitters(message);
+    if (_.includes(allowedChannelsForGetCommands, message.channel.name)) {
+      getAllSitters(message);
+    } else {
+      message.reply('This channel does not have permissions to use this command.')
+    }
   }
 
   // }
@@ -139,7 +162,8 @@ const checkMessage = (message) => {
 client.on('message', message => checkMessage(message));
 
 client.on('ready', () => {
-  client.user.setGame('use !help');
+  // client.user.setGame('use !help');
+  client.user.setActivity('use !help');
 });
 
 client.login(process.env.discordToken || settings.discordToken);
