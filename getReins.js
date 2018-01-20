@@ -62,7 +62,7 @@ const getReinsForLocation = async (location, serverId) => {
   const formattedReinforcers = formatReinforcements(entriesForLocation);
   return `\n
   Seat of Power: ${formattedLocation} ${_.isEmpty(inactiveSeat) ? '' : '- **INACTIVE**'}
-  Total Reinforcements: ${totalReinforcements}\n
+  Total Reinforcements: ${totalReinforcements}${totalReinforcements >= 1200000 ? ' Cos Fuck Dedo' : ''}\n
   Reinforcements: ${formattedReinforcers}`;
 };
 
@@ -136,7 +136,7 @@ const getReins = async (message) => {
     // message.reply(reply);
   } catch (e) {
     console.error(e);
-    message.reply('GetReins Usage: !getreins [<seat of power>]');
+    return message.reply('GetReins Usage: !getreins [<seat of power>]');
   }
 };
 
