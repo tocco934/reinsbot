@@ -74,6 +74,10 @@ const addSitter = async (message) => {
 };
 
 const addSitterForOther = async (message) => {
+  if (!_.includes(message.content, ';')) {
+    return message.reply('Remember the semicolons for * commands!\nAddSitter* Usage: !addsitter* <username>;<troopNumber>;<seat of power>');
+  }
+
   let parsedMessage;
   try {
     const cleanedUpContent = _.trim(_.replace(message.content, /^!addSitter\*/gi, ''));
@@ -104,6 +108,10 @@ const addSitterForOther = async (message) => {
 };
 
 const addReinsForOther = async (message) => {
+  if (!_.includes(message.content, ';')) {
+    return message.reply('Remember the semicolons for * commands!\nAddReins* Usage: !addreins* <username>;<troopNumber>;<seat of power>');
+  }
+
   const cleanedUpContent = _.trim(_.replace(message.content, /^!addreins\*/gi, ''));
   const [name, troopCount, givenLocation] = _.split(cleanedUpContent, ';');
 
