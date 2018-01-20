@@ -40,7 +40,6 @@ const commandMatches = (expected, message) =>
 const checkMessage = (message) => {
   // console.log('message', message.guild.id);
   // if (_.includes(rolesWithPermissions, message.member.highestRole)) {
-  console.log('message', message.channel);
   if (_.toLower(message.content).substring(0, 10) === '!addreins*') {
     addReinsForOther(message);
   } else if (_.toLower(message.content).substring(0, 9) === '!addreins') {
