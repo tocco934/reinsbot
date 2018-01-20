@@ -162,8 +162,8 @@ const checkMessage = (message) => {
 client.on('message', message => checkMessage(message));
 
 client.on('ready', () => {
-  // client.user.setGame('use !help');
-  client.user.setActivity('use !help');
+  client.user.setGame('use !help');
+  // client.user.setActivity('use !help');
 });
 
 client.login(process.env.discordToken || settings.discordToken);
