@@ -164,7 +164,6 @@ const getAllReins = async (serverId) => {
     }
   }
 
-  // console.log('res.rows', res.rows);
   return res.rows;
 };
 
