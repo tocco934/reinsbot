@@ -138,7 +138,7 @@ const checkMessage = (message) => {
     !surrender <location>
     
     **Other**
-    !whererein
+    !whererein [<x>;<y>]
     !whereclosest <x>;<y>
     !whereclosestall <x>;<y>
       
