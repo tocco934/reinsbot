@@ -39,6 +39,7 @@ const commandMatches = (expected, message) =>
 const allowedChannelsForGetCommands = ['reins', 'losers'];
 
 const checkMessage = (message) => {
+  message.guild.member(client.user).setNickname('ReinsBot');
   // if (_.includes(rolesWithPermissions, message.member.highestRole)) {
   if (_.toLower(message.content).substring(0, 10) === '!addreins*') {
     addReinsForOther(message);
@@ -168,7 +169,8 @@ const checkMessage = (message) => {
 client.on('message', message => checkMessage(message));
 
 client.on('ready', () => {
-  client.user.setGame('use !help');
+  // client.user.setGame('use !help');
+  client.user.setStatus('use !help');
   // client.user.setActivity('use !help');
 });
 
