@@ -16,9 +16,9 @@ const calculateSeatTotals = locations =>
 
 const removeInactiveSeats = async (serverId, locations) => {
   const inactiveSeats = await dataStore.getInactiveSeats(serverId);
-  const inactiveSeatNames = _.map(inactiveSeats, 'location');
+  const inactiveSeatNames = _.map(inactiveSeats, seat => _.toLower(seat.location));
   return _.filter(locations, location =>
-    !_.includes(inactiveSeatNames, location.location));
+    !_.includes(inactiveSeatNames, _.toLower(location.location)));
 };
 
 const getAllActiveSeatsWithTotals = async (serverId) => {
@@ -61,7 +61,7 @@ const addDistancesToSeats = (seats, playerCoords) =>
       return undefined;
     }));
 
-    // Thanks Eric <3
+// Thanks Eric <3
 const calculateEricVal = seat => (-0.004 * seat.distance ** 2 + 0.1
   * seat.distance + 100 - 0.00000000025 * seat.count ** 2 - 0.000025
   * seat.count + 100) / 2;
