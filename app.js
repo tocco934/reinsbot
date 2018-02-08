@@ -12,7 +12,6 @@ const getSimplifiedReins = require('./getReins').getSimplifiedReins;
 const deleteReins = require('./deleteReins').deleteReins;
 const deleteSitter = require('./deleteReins').deleteSitter;
 const deleteReinsFromLocation = require('./deleteReins').deleteReinsFromLocation;
-const whereRein = require('./whereRein').whereRein;
 const whereClosest = require('./whereRein').whereClosest;
 const whereClosestAll = require('./whereRein').whereClosestAll;
 const disableSeat = require('./inactiveSeats.js').disableSeat;
@@ -21,6 +20,7 @@ const getDisabledSeats = require('./inactiveSeats').getDisabledSeats;
 const getAllSitters = require('./dataStore').getAllSitters;
 const getAllTables = require('./dataStore').getAllTables;
 const initializeDataStore = require('./dataStore').initialize;
+const whereRein = require('./src/whereRein');
 // const dataStore = require('./dataStore');
 
 // TODO: Look into viewJS (.org ?????)
@@ -71,7 +71,7 @@ const checkMessage = (message) => {
   } else if (_.toLower(message.content).substring(0, 10) === '!delsitter') {
     deleteSitter(message);
   } else if (_.toLower(message.content).substring(0, 10) === '!whererein') {
-    whereRein(message);
+    whereRein.whereRein(message);
   } else if (_.toLower(message.content).substring(0, 10) === '!surrender') {
     if (_.includes(allowedChannelsForGetCommands, message.channel.name)) {
       deleteReinsFromLocation(message);
