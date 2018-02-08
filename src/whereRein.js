@@ -43,6 +43,7 @@ const whereRein = async (message) => {
     const seatsToRein = await findThreeLowestSeatTotals(message.guild.id);
     message.reply(seatsToRein);
   }
+  message.delete();
 };
 
 module.exports = {
