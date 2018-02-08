@@ -90,6 +90,10 @@ const setupTables = async (serverId) => {
   // await Promise.all([createReinsTable(serverId), createInactiveTable(serverId), cleanUp(serverId)]);
 };
 
+const initialize = async (serverId) => {
+  await Promise.all([createReinsTable(serverId), createInactiveTable(serverId)]);
+};
+
 const removeReins = async (id, serverId) => {
   let client;
   try {
@@ -334,6 +338,7 @@ const getAllTables = async (message) => {
 };
 
 module.exports = {
+  initialize,
   createReinsTable,
   getAllReins,
   getReinsByLocation,

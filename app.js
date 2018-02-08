@@ -20,6 +20,7 @@ const enableSeat = require('./inactiveSeats.js').enableSeat;
 const getDisabledSeats = require('./inactiveSeats').getDisabledSeats;
 const getAllSitters = require('./dataStore').getAllSitters;
 const getAllTables = require('./dataStore').getAllTables;
+const initializeDataStore = require('./dataStore').initialize;
 // const dataStore = require('./dataStore');
 
 // TODO: Look into viewJS (.org ?????)
@@ -35,12 +36,10 @@ const rolesWithPermissions = ['Bottom', 'Top', 'Swinger', 'Admin'];
 const commandMatches = (expected, message) =>
   _.toLower(message.content).substring(0, expected.length) === _.toLower(expected);
 
-  const allowedChannelsForGetCommands = ['reins', 'losers'];
+const allowedChannelsForGetCommands = ['reins', 'losers'];
 
 const checkMessage = (message) => {
-  // console.log('message', message.guild.id);
   // if (_.includes(rolesWithPermissions, message.member.highestRole)) {
-  console.log('message', message.channel);
   if (_.toLower(message.content).substring(0, 10) === '!addreins*') {
     addReinsForOther(message);
   } else if (_.toLower(message.content).substring(0, 9) === '!addreins') {
@@ -53,19 +52,19 @@ const checkMessage = (message) => {
     if (_.includes(allowedChannelsForGetCommands, message.channel.name)) {
       getReins(message);
     } else {
-      message.reply('This channel does not have permissions to use this command.')
+      message.reply('This channel does not have permissions to use this command.');
     }
   } else if (_.toLower(message.content).substring(0, 9) === '!sumreins') {
     if (_.includes(allowedChannelsForGetCommands, message.channel.name)) {
       getSimplifiedReins(message);
     } else {
-      message.reply('This channel does not have permissions to use this command.')
+      message.reply('This channel does not have permissions to use this command.');
     }
   } else if (_.toLower(message.content).substring(0, 12) === '!delreinsall') {
     if (_.includes(allowedChannelsForGetCommands, message.channel.name)) {
       deleteReinsFromLocation(message);
     } else {
-      message.reply('This channel does not have permissions to use this command.')
+      message.reply('This channel does not have permissions to use this command.');
     }
   } else if (_.toLower(message.content).substring(0, 9) === '!delreins') {
     deleteReins(message);
@@ -77,7 +76,7 @@ const checkMessage = (message) => {
     if (_.includes(allowedChannelsForGetCommands, message.channel.name)) {
       deleteReinsFromLocation(message);
     } else {
-      message.reply('This channel does not have permissions to use this command.')
+      message.reply('This channel does not have permissions to use this command.');
     }
   } else if (_.toLower(message.content).substring(0, 8) === '!fixshit') {
     message.reply('Nothing To Fix!');
@@ -95,7 +94,14 @@ const checkMessage = (message) => {
     if (_.includes(allowedChannelsForGetCommands, message.channel.name)) {
       getAllSitters(message);
     } else {
-      message.reply('This channel does not have permissions to use this command.')
+      message.reply('This channel does not have permissions to use this command.');
+    }
+  } else if (commandMatches('!initialize', message)) {
+    if (message.author.id === '103615428508553216') {
+      initializeDataStore(message.guild.id);
+      message.reply('Setting tables up');
+    } else {
+      message.reply(`User ${message.author.id} does not have permissions to use this command`);
     }
   }
 
